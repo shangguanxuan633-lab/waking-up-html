@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Waking-Up 复习资料总览</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --paper: #ffffff;
+      --book: #fbfaf7;
+      --ink: #242424;
+      --muted: #686868;
+      --line: #e5e3dc;
+      --line-strong: #d8d5cb;
+      --blue: #315fbc;
+      --teal: #0f766e;
+      --amber: #9a6700;
+      --soft-blue: #f0f5ff;
+      --soft-teal: #ecfdf5;
+      --soft-amber: #fff8e7;
+      --soft-rose: #fff1f2;
+      --shadow: 0 10px 28px rgba(36, 36, 36, .06);
+      --book-shadow: 0 22px 70px rgba(36, 36, 36, .08);
+      --accent: var(--blue);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.74;
+      letter-spacing: 0;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 250, 247, .94);
+      backdrop-filter: blur(12px);
+    }
+    .topbar-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 10px 18px;
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(220px, 420px);
+      gap: 14px;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--soft-blue);
+      border: 1px solid var(--line-strong);
+      color: var(--blue);
+      flex: none;
+      font-size: 14px;
+    }
+    .brand span:last-child {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .searchbox {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+    }
+    .searchbox:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(49, 95, 188, .12);
+    }
+    .layout {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 18px 52px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+    .hero {
+      min-height: 360px;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(240, 245, 255, .86), rgba(236, 253, 245, .54) 48%, rgba(255, 248, 231, .82)),
+        var(--book);
+      box-shadow: var(--book-shadow);
+      display: grid;
+      gap: 22px;
+      align-content: end;
+    }
+    .eyebrow {
+      margin: 0;
+      color: var(--accent);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      max-width: 980px;
+    }
+    .hero-copy {
+      max-width: 980px;
+      margin: 0;
+      font-size: 18px;
+      color: #3e3e3e;
+    }
+    .meta-grid,
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .meta-item,
+    .stat-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .74);
+      padding: 12px;
+      min-width: 0;
+    }
+    .meta-item b,
+    .stat-item b {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .meta-item span,
+    .stat-item span {
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    .section > p {
+      margin: 8px 0 14px;
+      color: #424242;
+    }
+    .toc-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .toc-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--book);
+      color: var(--ink);
+      font-size: 14px;
+      max-width: 100%;
+    }
+    .toc-pill:hover,
+    .toc-pill.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .level-3 { background: #fff; }
+    .knowledge-list,
+    .diagram-grid,
+    .qa-grid,
+    .case-grid,
+    .code-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .knowledge-card,
+    .diagram-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--book);
+      padding: 16px;
+      min-width: 0;
+    }
+    .compact-card { background: #fff; }
+    .knowledge-title {
+      display: block;
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.42;
+      margin-bottom: 8px;
+    }
+    .knowledge-card p {
+      margin: 8px 0 0;
+      color: #3f3f3f;
+    }
+    .knowledge-note {
+      border-left: 3px solid var(--accent);
+      padding-left: 10px;
+      color: #555;
+      background: rgba(255, 255, 255, .58);
+    }
+    .diagram-card h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+    .diagram-caption {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .mermaid-figure {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow-x: auto;
+    }
+    .mermaid {
+      min-width: 620px;
+    }
+    .mermaid svg {
+      max-width: none;
+      height: auto;
+    }
+    .mermaid-raw {
+      margin-top: 10px;
+    }
+    .mermaid-raw summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .mermaid-error {
+      margin-top: 10px;
+      border: 1px solid #fecdd3;
+      border-radius: 8px;
+      background: var(--soft-rose);
+      color: #9f1239;
+      padding: 10px;
+    }
+    .source-material {
+      background: var(--paper);
+    }
+    .source-body {
+      max-width: 1060px;
+    }
+    .source-body h1,
+    .source-body h2,
+    .source-body h3,
+    .source-body h4 {
+      scroll-margin-top: 82px;
+      letter-spacing: 0;
+    }
+    .source-body h1 {
+      font-size: 34px;
+      margin: 4px 0 18px;
+    }
+    .source-body h2 {
+      font-size: 27px;
+      margin: 30px 0 12px;
+    }
+    .source-body h3 {
+      font-size: 22px;
+      margin: 28px 0 10px;
+      padding-top: 6px;
+      border-top: 1px solid var(--line);
+    }
+    .source-body h4,
+    .source-body h5,
+    .source-body h6 {
+      font-size: 18px;
+      margin: 22px 0 8px;
+    }
+    .source-body p {
+      margin: 10px 0;
+    }
+    .md-list {
+      display: grid;
+      gap: 6px;
+      margin: 10px 0 14px;
+    }
+    .md-list-row {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr);
+      gap: 7px;
+      align-items: start;
+    }
+    .md-list-row.depth-1 { padding-left: 20px; }
+    .md-list-row.depth-2 { padding-left: 40px; }
+    .md-list-row.depth-3 { padding-left: 60px; }
+    .md-list-row.depth-4 { padding-left: 80px; }
+    .md-list-row.depth-5 { padding-left: 100px; }
+    .md-marker {
+      color: var(--accent);
+      font-weight: 800;
+      text-align: right;
+    }
+    code {
+      font-family: Consolas, "Cascadia Code", "SFMono-Regular", monospace;
+      background: #f3f1ea;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 1px 5px;
+      font-size: .92em;
+    }
+    .code-block,
+    .mermaid-source,
+    .mermaid-raw pre {
+      margin: 12px 0;
+      padding: 14px;
+      overflow-x: auto;
+      background: #1f2937;
+      color: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #111827;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+    .code-block code,
+    .mermaid-source code,
+    .mermaid-raw code {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      color: inherit;
+    }
+    blockquote {
+      margin: 12px 0;
+      padding: 10px 14px;
+      border-left: 4px solid var(--accent);
+      background: var(--soft-amber);
+      color: #4b4638;
+    }
+    .source-detail {
+      margin: 12px 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+    }
+    .source-detail summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-weight: 800;
+    }
+    .source-figure,
+    .source-html-center {
+      margin: 16px 0;
+      text-align: center;
+    }
+    .avatar-figure {
+      display: inline-block;
+      margin: 6px;
+      vertical-align: middle;
+    }
+    .avatar-figure img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+    .source-figure img,
+    .inline-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .source-figure figcaption {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .source-link-wrap {
+      display: inline-block;
+      max-width: 100%;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+      min-width: 110px;
+    }
+    th {
+      background: var(--soft-blue);
+      text-align: left;
+    }
+    .license-note {
+      border: 1px solid var(--line-strong);
+      background: var(--soft-amber);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .hidden-by-search { display: none !important; }
+    .no-results {
+      display: none;
+      border: 1px solid #fecdd3;
+      background: var(--soft-rose);
+      color: #9f1239;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .no-results.visible { display: block; }
+    @media (max-width: 720px) {
+      .topbar-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .layout {
+        padding: 18px 12px 36px;
+      }
+      .hero,
+      .section {
+        padding: 18px;
+      }
+      h1 {
+        font-size: 34px;
+      }
+      .hero-copy {
+        font-size: 16px;
+      }
+      .md-list-row.depth-3,
+      .md-list-row.depth-4,
+      .md-list-row.depth-5 {
+        padding-left: 24px;
+      }
+      .mermaid {
+        min-width: 520px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="返回总览">
+        <span class="brand-mark">WU</span>
+        <span>Waking-Up 复习资料总览</span>
+      </a>
+      <input id="search" class="searchbox" type="search" placeholder="搜索本页知识点、追问、命令或章节">
+    </div>
+  </header>
+  <main class="layout">
+    <section class="hero" data-search-section>
+      <div>
+        <p class="eyebrow">Waking-Up HTML · GPLv3 Derived Review</p>
+        <h1>Waking-Up 复习资料总览</h1>
+      </div>
+      <p class="hero-copy">把原仓库的使用方式、模块入口、补充链接与授权信息整理成一个离线入口页。</p>
+      <div class="meta-grid">
+        <div class="meta-item"><b>源文件</b><span>README.md</span></div>
+        <div class="meta-item"><b>源提交</b><span>cf692b5</span></div>
+        <div class="meta-item"><b>生成时间</b><span>2026/05/10 20:09:57 Asia/Shanghai</span></div>
+        <div class="meta-item"><b>授权</b><span>GPLv3，保留原作者与来源</span></div>
+      </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>资料入口</h2>
+      <div class="toc-row"><a class="toc-pill active" href="index.html">总览</a><a class="toc-pill" href="computer-network.html">计算机网络</a><a class="toc-pill" href="operating-systems.html">操作系统</a><a class="toc-pill" href="database.html">数据库</a><a class="toc-pill" href="design-pattern.html">设计模式</a><a class="toc-pill" href="git-commandline-rest.html">Git/REST/命令行</a><a class="toc-pill" href="python-handbook.html">Python</a></div>
+      <p>相关页：<a href="computer-network.html">计算机网络</a><a href="operating-systems.html">操作系统</a><a href="database.html">数据库</a><a href="design-pattern.html">设计模式</a><a href="git-commandline-rest.html">Git/REST/命令行</a><a href="python-handbook.html">Python</a></p>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>本页统计</h2>
+      <div class="stat-grid">
+        <div class="stat-item"><b>原文行数</b><span>159</span></div>
+        <div class="stat-item"><b>标题节点</b><span>11</span></div>
+        <div class="stat-item"><b>折叠追问</b><span>0</span></div>
+        <div class="stat-item"><b>图片</b><span>28</span></div>
+        <div class="stat-item"><b>代码块</b><span>0</span></div>
+        <div class="stat-item"><b>列表行</b><span>6</span></div>
+      </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>页内目录</h2>
+      <div class="toc-row">
+        <a class="toc-pill" href="#review-cards">逐章复习卡</a>
+        <a class="toc-pill" href="#visual-atlas">Mermaid 图谱</a>
+        <a class="toc-pill" href="#source-material">原文资料转写</a>
+        <a class="toc-pill" href="#review-plan">复习计划</a>
+        <a class="toc-pill level-1" href="#waking-up">Waking-Up</a><a class="toc-pill level-3" href="#如何使用">如何使用？</a><a class="toc-pill level-3" href="#contribute">Contribute</a><a class="toc-pill level-2" href="#1-计算机网络">1. 计算机网络</a><a class="toc-pill level-2" href="#2-操作系统">2. 操作系统</a><a class="toc-pill level-2" href="#3-数据库">3. 数据库</a><a class="toc-pill level-2" href="#4-设计模式">4. 设计模式</a><a class="toc-pill level-2" href="#5-工具">5. 工具</a><a class="toc-pill level-2" href="#6-python">6. Python</a><a class="toc-pill level-2" href="#7-面经">7. 面经</a><a class="toc-pill level-2" href="#补充-eyeglasses">补充:eyeglasses:：</a>
+      </div>
+    </section>
+
+    
+    <section class="section" data-search-section>
+      <h2>HTML 资料包</h2>
+      <p>本目录把 Waking-Up 仓库当前提交 <code>cf692b5</code> 的 7 个 Markdown 文件转换成 7 个 HTML 文件。</p>
+      <ul class="knowledge-list">
+    <li class="knowledge-card" data-search="计算机网络面试复习 围绕 TCP/UDP、HTTP/HTTPS、DNS、IP、ARP、NAT、路由与版本演进做面试化梳理。">
+      <b class="knowledge-title"><a href="computer-network.html">计算机网络面试复习</a></b>
+      <p>围绕 TCP/UDP、HTTP/HTTPS、DNS、IP、ARP、NAT、路由与版本演进做面试化梳理。</p>
+      <p class="knowledge-note">注释：源文件 <code>Computer Network.md</code> 已生成一对一 HTML：<a href="computer-network.html">computer-network.html</a>。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="操作系统面试复习 覆盖进程线程、IPC、调度、死锁、内存、虚拟内存、I/O 与磁盘调度。">
+      <b class="knowledge-title"><a href="operating-systems.html">操作系统面试复习</a></b>
+      <p>覆盖进程线程、IPC、调度、死锁、内存、虚拟内存、I/O 与磁盘调度。</p>
+      <p class="knowledge-note">注释：源文件 <code>Operating Systems.md</code> 已生成一对一 HTML：<a href="operating-systems.html">operating-systems.html</a>。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="数据库面试复习 围绕事务、隔离级别、锁、MVCC、索引、存储引擎、优化与复制展开。">
+      <b class="knowledge-title"><a href="database.html">数据库面试复习</a></b>
+      <p>围绕事务、隔离级别、锁、MVCC、索引、存储引擎、优化与复制展开。</p>
+      <p class="knowledge-note">注释：源文件 <code>Database.md</code> 已生成一对一 HTML：<a href="database.html">database.html</a>。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="设计模式复习 把 GoF 设计模式按创建型、结构型、行为型整理成可检索的学习手册。">
+      <b class="knowledge-title"><a href="design-pattern.html">设计模式复习</a></b>
+      <p>把 GoF 设计模式按创建型、结构型、行为型整理成可检索的学习手册。</p>
+      <p class="knowledge-note">注释：源文件 <code>Design Pattern.md</code> 已生成一对一 HTML：<a href="design-pattern.html">design-pattern.html</a>。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="Git / RESTful API / 命令行复习 沉淀 Git 常用操作、撤销回滚、分支标签、REST 设计原则和 Linux 命令。">
+      <b class="knowledge-title"><a href="git-commandline-rest.html">Git / RESTful API / 命令行复习</a></b>
+      <p>沉淀 Git 常用操作、撤销回滚、分支标签、REST 设计原则和 Linux 命令。</p>
+      <p class="knowledge-note">注释：源文件 <code>Git-ComdLine-REST.md</code> 已生成一对一 HTML：<a href="git-commandline-rest.html">git-commandline-rest.html</a>。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="Python 面试复习 覆盖生成器、迭代器、容器、GIL、装饰器、垃圾回收、拷贝与基础语法。">
+      <b class="knowledge-title"><a href="python-handbook.html">Python 面试复习</a></b>
+      <p>覆盖生成器、迭代器、容器、GIL、装饰器、垃圾回收、拷贝与基础语法。</p>
+      <p class="knowledge-note">注释：源文件 <code>Python Handbook.md</code> 已生成一对一 HTML：<a href="python-handbook.html">python-handbook.html</a>。</p>
+    </li>
+  </ul>
+    </section>
+  
+
+    <section class="section" data-search-section>
+      <h2>能力地图</h2>
+      <ul class="knowledge-list">
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P4/P5</b>
+      <p>能准确复述概念、常见流程、基本优缺点，回答不混淆术语。</p>
+      <p class="knowledge-note">注释：复习 总览 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P6</b>
+      <p>能把概念和机制连起来，说明常见失败场景、复杂度、边界条件。</p>
+      <p class="knowledge-note">注释：复习 总览 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P7</b>
+      <p>能结合生产指标、命令、日志、容量和取舍，主动补充排障证据。</p>
+      <p class="knowledge-note">注释：复习 总览 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P8/P9</b>
+      <p>能从系统设计、平台治理、风险控制和团队规范层面讲清可落地方案。</p>
+      <p class="knowledge-note">注释：复习 总览 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  </ul>
+    </section>
+
+    <section id="review-cards" class="section" data-search-section>
+      <h2>逐章复习卡</h2>
+      <p>下面按原文标题一对一生成复习卡，不替代原文，而是帮你把每个章节转成面试表达路径。</p>
+      <ul class="knowledge-list">
+    <li class="knowledge-card" data-search="如何使用？ overview">
+      <b class="knowledge-title">1. 如何使用？</b>
+      <p>原文对应章节：<a href="#如何使用">如何使用？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="Contribute overview">
+      <b class="knowledge-title">2. Contribute</b>
+      <p>原文对应章节：<a href="#contribute">Contribute</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="1. 计算机网络 overview">
+      <b class="knowledge-title">3. 1. 计算机网络</b>
+      <p>原文对应章节：<a href="#1-计算机网络">1. 计算机网络</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="2. 操作系统 overview">
+      <b class="knowledge-title">4. 2. 操作系统</b>
+      <p>原文对应章节：<a href="#2-操作系统">2. 操作系统</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="3. 数据库 overview">
+      <b class="knowledge-title">5. 3. 数据库</b>
+      <p>原文对应章节：<a href="#3-数据库">3. 数据库</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="4. 设计模式 overview">
+      <b class="knowledge-title">6. 4. 设计模式</b>
+      <p>原文对应章节：<a href="#4-设计模式">4. 设计模式</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：设计模式题先讲意图和适用变化点，再讲参与角色、类关系、优缺点和过度设计风险。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="5. 工具 overview">
+      <b class="knowledge-title">7. 5. 工具</b>
+      <p>原文对应章节：<a href="#5-工具">5. 工具</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="6. Python overview">
+      <b class="knowledge-title">8. 6. Python</b>
+      <p>原文对应章节：<a href="#6-python">6. Python</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="7. 面经 overview">
+      <b class="knowledge-title">9. 7. 面经</b>
+      <p>原文对应章节：<a href="#7-面经">7. 面经</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="补充:eyeglasses:： overview">
+      <b class="knowledge-title">10. 补充:eyeglasses:：</b>
+      <p>原文对应章节：<a href="#补充-eyeglasses">补充:eyeglasses:：</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  </ul>
+    </section>
+
+    <section id="visual-atlas" class="section" data-search-section>
+      <h2>Mermaid 图谱</h2>
+      <div class="diagram-grid">
+    <article class="diagram-card" data-search="总览 章节路线 从原始 Markdown 标题提取，保留一对一章节顺序。 roadmap overview">
+      <h3>总览 章节路线</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+  n1[&quot;1. 如何使用？&quot;]
+  n2[&quot;2. Contribute&quot;]
+  n1 --&gt; n2
+  n3[&quot;3. 1. 计算机网络&quot;]
+  n2 --&gt; n3
+  n4[&quot;4. 2. 操作系统&quot;]
+  n3 --&gt; n4
+  n5[&quot;5. 3. 数据库&quot;]
+  n4 --&gt; n5
+  n6[&quot;6. 4. 设计模式&quot;]
+  n5 --&gt; n6
+  n7[&quot;7. 5. 工具&quot;]
+  n6 --&gt; n7
+  n8[&quot;8. 6. Python&quot;]
+  n7 --&gt; n8
+  n9[&quot;9. 7. 面经&quot;]
+  n8 --&gt; n9
+  n10[&quot;10. 补充:eyeglasses:：&quot;]
+  n9 --&gt; n10</code></pre>
+      <p class="diagram-caption">从原始 Markdown 标题提取，保留一对一章节顺序。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="面试回答闭环 每个知识点都按这个闭环复习，能从背诵切到工程表达。 answer interview">
+      <h3>面试回答闭环</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+      A[&quot;一句话定义&quot;] --&gt; B[&quot;为什么存在&quot;]
+      B --&gt; C[&quot;核心机制&quot;]
+      C --&gt; D[&quot;生产场景&quot;]
+      D --&gt; E[&quot;指标/命令/证据&quot;]
+      E --&gt; F[&quot;取舍与边界&quot;]
+      F --&gt; G[&quot;高频追问&quot;]</code></pre>
+      <p class="diagram-caption">每个知识点都按这个闭环复习，能从背诵切到工程表达。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="Waking-Up 资料版图 入口页保留原仓库导航，并补上 HTML 版目录。 overview">
+      <h3>Waking-Up 资料版图</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+        R[&quot;README 总览&quot;] --&gt; N[&quot;计算机网络&quot;]
+        R --&gt; O[&quot;操作系统&quot;]
+        R --&gt; D[&quot;数据库&quot;]
+        R --&gt; P[&quot;设计模式&quot;]
+        R --&gt; T[&quot;Git / REST / 命令行&quot;]
+        R --&gt; Y[&quot;Python&quot;]
+        N --&gt; I[&quot;后端校招/社招面试&quot;]
+        O --&gt; I
+        D --&gt; I
+        P --&gt; I</code></pre>
+      <p class="diagram-caption">入口页保留原仓库导航，并补上 HTML 版目录。</p>
+    </article>
+  </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>Mermaid 渲染说明</h2>
+      <ul class="knowledge-list">
+        <li class="knowledge-card">
+          <b class="knowledge-title">离线阅读与源码保底</b>
+          <p>页面会尝试从 jsDelivr 和 unpkg 加载 Mermaid，并使用 <code>mermaid.initialize</code> 与 <code>mermaid.run</code> 渲染图谱。</p>
+          <p class="knowledge-note">注释：如果网络不可用，原始 Mermaid 源码仍然保留在 <code>mermaid-raw</code> 折叠块里，不会影响正文阅读。</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="source-material" class="section source-material" data-search-section>
+      <h2>原文资料转写</h2>
+      <p>以下内容从原始 Markdown 转为 HTML，并保留原有目录、图片、折叠追问、代码与参考链接。</p>
+      <div class="source-body"><h1 id="waking-up">Waking-Up</h1>
+<blockquote>大多数人都高估了他们一天能做的事情，但低估了他们一年能做的事情</blockquote>
+<div class="source-html-center">
+<figure class="source-figure"><img src="_v_images/20191229112508482_31766.png" alt="20191229112508482_31766.png"><figcaption>20191229112508482_31766.png</figcaption></figure>
+</div>
+<p>这是我用来准备后端开发校招面试的一个笔记本。按照计算机基础知识的不同版块，记录了面试中常见的问题以及比较规范的答案，大部分问题都带有更加细节的知识点追问。我用它来收集整理自己遇到的一些面试题，并且在面试前回顾。</p>
+<div class="source-html-center">
+<div class="table-wrap"><table><thead><tr><th>&nbsp;&nbsp;&nbsp;计算机网络&nbsp;&nbsp;&nbsp;</th><th>&nbsp;&nbsp;&nbsp;操作系统&nbsp;&nbsp;&nbsp;</th><th>&nbsp;&nbsp;&nbsp;&nbsp;数据库&nbsp;&nbsp;&nbsp;&nbsp;</th><th>&nbsp;&nbsp;&nbsp;设计模式&nbsp;&nbsp;&nbsp;</th><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;工具&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>&nbsp;&nbsp;&nbsp;&nbsp;Python&nbsp;&nbsp;&nbsp;&nbsp;</th><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;面经&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th></tr></thead><tbody><tr><td><a href="#1-计算机网络">:cloud:</a></td><td><a href="#2-操作系统">:computer:</a></td><td><a href="#3-数据库">:floppydisk:</a></td><td><a href="#4-设计模式">:art:</a></td><td><a href="#5-工具">:wrench:</a></td><td><a href="#6-python">:snake:</a></td><td><a href="#7-面经">:memo:</a></td></tr></tbody></table></div>
+</div>
+<h3 id="如何使用">如何使用？</h3>
+<p>这份笔记采用的并不是对每一个知识点进行讲解的形式，它的目的很纯粹，就是为了快速备战面试考点，因此全都是采用【常见面试问题 + follow-up questions + 可以直接采用的答案】的形式，力求达到效率备战的目的。</p>
+<p>你可以将其作为<strong>模拟面试</strong>的问题来源，测试你的熟练程度；也可以当作面试前的<strong>知识点梳理</strong>，对一些细节问题进行填补；</p>
+<p>当然，这个笔记本也同样适用于那些能够通过简历筛选，但是对计算机基础所知甚少的人，如果你之前从未在学校修过或者自学过这些课程，你依然可以通过这份笔记<strong>快速备战面试</strong>。</p>
+<p>当你浏览每个版块的目录时，你可能会觉得并没有涉及到多少问题，但其实，<strong>每个问题下的一连串追问</strong>才是这些笔记的精华所在。如果你觉得你已经对目录中的问题了然于胸，你可以点进这些问题，多看看它们的 follow-up questions.</p>
+<p>这个repo没有包含数据结构与算法部分，你可以查看我的另一个repo：<a href="https://github.com/wolverinn/Iridescent" target="_blank" rel="noreferrer">Solid data structure and algorithms</a>，在这个repo中我系统地练习了各种数据结构和算法，并提供了Python代码</p>
+<h3 id="contribute">Contribute</h3>
+<p>这个仓库目前还在不断完善之中，有些问题还没加入到笔记，有些问题的思路和答案可以做得更好！如果你有很棒的想法，欢迎提 issues 或者 pull requests！</p>
+<p>感谢所有参与到这个项目中的伙伴们（如果下面漏掉了你，可以提醒我一下）～</p>
+<p>Contributers: </p>
+<a class="source-link-wrap" href="https://github.com/wangzitiansky">
+<figure class="source-figure avatar-figure"><img src="https://avatars0.githubusercontent.com/u/49009644?s=460&amp;v=4" alt="49009644?s=460&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/QianXu1998">
+<figure class="source-figure avatar-figure"><img src="https://avatars3.githubusercontent.com/u/30328533?s=400&amp;v=4" alt="30328533?s=400&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/XifeiNi">
+<figure class="source-figure avatar-figure"><img src="https://avatars3.githubusercontent.com/u/31680997?s=88&amp;v=4" alt="31680997?s=88&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/Zjd1996">
+<figure class="source-figure avatar-figure"><img src="https://avatars3.githubusercontent.com/u/17854831?s=460&amp;v=4" alt="17854831?s=460&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/imbant">
+<figure class="source-figure avatar-figure"><img src="https://avatars3.githubusercontent.com/u/17983739?s=460&amp;v=4" alt="17983739?s=460&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/lienze">
+<figure class="source-figure avatar-figure"><img src="https://avatars3.githubusercontent.com/u/13149356?s=460&amp;v=4" alt="13149356?s=460&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/hikirkendall">
+<figure class="source-figure avatar-figure"><img src="https://avatars0.githubusercontent.com/u/38038825?s=460&amp;v=4" alt="38038825?s=460&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/lutherlau">
+<figure class="source-figure avatar-figure"><img src="https://avatars3.githubusercontent.com/u/29849382?s=460&amp;v=4" alt="29849382?s=460&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/CharlesZKQ">
+<figure class="source-figure avatar-figure"><img src="https://avatars0.githubusercontent.com/u/58759901?s=460&amp;v=4" alt="58759901?s=460&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/MarcelArthur">
+<figure class="source-figure avatar-figure"><img src="https://avatars0.githubusercontent.com/u/12690819?s=400&amp;v=4" alt="12690819?s=400&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/zhou-xia-ping">
+<figure class="source-figure avatar-figure"><img src="https://avatars.githubusercontent.com/u/40256652?s=460&amp;v=4" alt="40256652?s=460&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/jiamingli9674">
+<figure class="source-figure avatar-figure"><img src="https://avatars.githubusercontent.com/u/39242771?s=460&amp;v=4" alt="39242771?s=460&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/zhukewen1998">
+<figure class="source-figure avatar-figure"><img src="https://avatars.githubusercontent.com/u/53121066?s=400&amp;v=4" alt="53121066?s=400&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/chaoers">
+<figure class="source-figure avatar-figure"><img src="https://avatars.githubusercontent.com/u/44529210?s=400&amp;v=4" alt="44529210?s=400&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/imageslr">
+<figure class="source-figure avatar-figure"><img src="https://avatars.githubusercontent.com/u/17822028?s=400&amp;v=4" alt="17822028?s=400&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/PlexPt">
+<figure class="source-figure avatar-figure"><img src="https://avatars.githubusercontent.com/u/15922823?s=400&amp;v=4" alt="15922823?s=400&amp;v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/fengxiaop">
+<figure class="source-figure avatar-figure"><img src="https://avatars.githubusercontent.com/u/58691327?v=4" alt="58691327?v=4" style="max-width:40px"></figure>
+</a>
+<a class="source-link-wrap" href="https://github.com/RealBeBetter">
+<figure class="source-figure avatar-figure"><img src="https://avatars.githubusercontent.com/u/45707683?v=4" alt="45707683?v=4" style="max-width:40px"></figure>
+</a>
+<h2 id="1-计算机网络">1. <a href="computer-network.html">计算机网络</a></h2>
+<div class="source-html-center">
+<a class="source-link-wrap" href="computer-network.html">
+</div>
+<h2 id="2-操作系统">2. <a href="operating-systems.html">操作系统</a></h2>
+<div class="source-html-center">
+<a class="source-link-wrap" href="operating-systems.html">
+</div>
+<h2 id="3-数据库">3. <a href="database.html">数据库</a></h2>
+<div class="source-html-center">
+<a class="source-link-wrap" href="database.html">
+</div>
+<h2 id="4-设计模式">4. <a href="design-pattern.html">设计模式</a></h2>
+<p>Provided by @<a href="https://github.com/lutherlau" target="_blank" rel="noreferrer">lutherlau</a></p>
+<div class="source-html-center">
+<a class="source-link-wrap" href="design-pattern.html">
+<figure class="source-figure"><img src="_v_images/20200516165630.png" alt="20200516165630.png"><figcaption>20200516165630.png</figcaption></figure>
+</div>
+<h2 id="5-工具">5. <a href="git-commandline-rest.html">工具</a></h2>
+<div class="source-html-center">
+<a class="source-link-wrap" href="git-commandline-rest.html">
+</div>
+<h2 id="6-python">6. <a href="python-handbook.html">Python</a></h2>
+<div class="source-html-center">
+<a class="source-link-wrap" href="python-handbook.html">
+</div>
+<h2 id="7-面经">7. <a href="https://www.nowcoder.com/discuss/359048" target="_blank" rel="noreferrer">面经</a></h2>
+<p>以下是我的面经，以及备战面试上岸经历分享</p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://www.nowcoder.com/discuss/359048" target="_blank" rel="noreferrer">字节跳动后端开发三轮面经</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://mp.weixin.qq.com/s?__biz=MzU2OTk2Mzg3Mg==&amp;mid=2247483685&amp;idx=1&amp;sn=933611d3dec4b4054cdbc33738261243&amp;chksm=fcf7e52acb806c3c2390999e99a08e02ad51c484d5e47a9188fbcdb15e8693e11558915db842&amp;token=1562114548&amp;lang=zh_CN#rd" target="_blank" rel="noreferrer">字节跳动后端一面面经</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://mp.weixin.qq.com/s?__biz=MzU2OTk2Mzg3Mg==&amp;mid=2247483707&amp;idx=1&amp;sn=605d5f502dff18d6c335fefc677c0c55&amp;chksm=fcf7e534cb806c22588ced14f6040e907a08d0c815a7ea8ba0f4cd2be0ac2d7821c490104764&amp;token=1562114548&amp;lang=zh_CN#rd" target="_blank" rel="noreferrer">上岸经历分享</a></div></div>
+</div>
+<h2 id="补充-eyeglasses">补充:eyeglasses:：</h2>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>字节跳动内推（实习/社招/校招），请戳<a href="https://github.com/wolverinn/Waking-Up/issues/16" target="_blank" rel="noreferrer">:raisinghand::raisinghand:这里:raisinghand::raisinghand:</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>查看我的最新项目：<a href="https://github.com/wolverinn/Build-your-programming-skills" target="_blank" rel="noreferrer">技术学习Roadmap</a>（工作之后的个人技术成长路线）</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>我的公众号：<a href="https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&amp;album_id=1807403091504250883" target="_blank" rel="noreferrer">Hardy的小屋</a>，聊聊个人成长，欢迎关注</div></div>
+</div>
+<div class="source-html-center">
+<figure class="source-figure"><img src="_v_images/20191229111930083_22798.png" alt="20191229111930083_22798.png" style="max-width:640px"><figcaption>20191229111930083_22798.png</figcaption></figure>
+</div>
+<hr>
+<blockquote>这个笔记本的名字来源于电影《Lone Survivor》中的配乐《Waking Up》；在电影中，这段配乐出现的场景，是两名队员在基地外面的大草原上晨跑。</blockquote>
+<blockquote>电影中我很喜欢的一句话：  </blockquote>
+<blockquote>Anything in life worth doing is worth overdoing. Moderation is for cowards.</blockquote>
+<div class="source-html-center">
+<a class="source-link-wrap" href="python-handbook.html">
+</div></div>
+    </section>
+
+    <section id="review-plan" class="section" data-search-section>
+      <h2>3 / 5 / 7 天复习计划</h2>
+      <ul class="knowledge-list">
+        <li class="knowledge-card">
+          <b class="knowledge-title">3 天：先过主干</b>
+          <p>第一遍只看目录、逐章复习卡和 Mermaid 图谱，把每个章节整理成一句话定义与一个典型追问。</p>
+          <p class="knowledge-note">注释：这一轮不要陷入细枝末节，目标是建立完整地图。</p>
+        </li>
+        <li class="knowledge-card">
+          <b class="knowledge-title">5 天：补齐追问</b>
+          <p>第二遍打开原文折叠块，按“机制、边界、故障、指标、命令”补答案，遇到不会的地方回到原文或权威资料。</p>
+          <p class="knowledge-note">注释：能讲清追问，才算从“看过”变成“能答”。</p>
+        </li>
+        <li class="knowledge-card">
+          <b class="knowledge-title">7 天：模拟面试</b>
+          <p>第三遍用页内搜索随机抽题，强迫自己 2 分钟内回答，再对照原文和复习卡补证据链。</p>
+          <p class="knowledge-note">注释：最后一天只修表达，不再大面积新增材料，保证临场稳定。</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>来源与授权</h2>
+      <div class="license-note">
+        <p>本页是基于 <a href="https://github.com/wolverinn/Waking-Up" target="_blank" rel="noreferrer">wolverinn/Waking-Up</a> 的 GPLv3 授权资料生成的本地 HTML 改编版。源文件：<a href="https://github.com/wolverinn/Waking-Up/blob/cf692b5/README.md" target="_blank" rel="noreferrer">README.md</a>，源提交：<code>cf692b5</code>。</p>
+        <p>输出目录内已复制 <code>LICENSE</code>。如果这些 HTML 被公开分发，应继续保留 GPLv3 授权、原始来源、修改说明与对应源码/生成脚本。</p>
+      </div>
+    </section>
+
+    <div id="noResults" class="no-results">没有找到匹配内容。换一个关键词试试。</div>
+  </main>
+  <script>
+    const searchInput = document.getElementById("search");
+    const noResults = document.getElementById("noResults");
+    const searchable = [...document.querySelectorAll("[data-search-section]")];
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      searchable.forEach((section) => {
+        const haystack = section.textContent.toLowerCase();
+        const match = !query || haystack.includes(query);
+        section.classList.toggle("hidden-by-search", !match);
+        if (match) visible += 1;
+      });
+      noResults.classList.toggle("visible", query && visible === 0);
+    });
+
+    async function loadMermaid() {
+      const urls = [
+        "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js",
+        "https://unpkg.com/mermaid@10/dist/mermaid.min.js"
+      ];
+      for (const url of urls) {
+        try {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = url;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+          if (window.mermaid) return window.mermaid;
+        } catch {}
+      }
+      return null;
+    }
+
+    async function renderMermaid() {
+      const blocks = [...document.querySelectorAll(".mermaid-source")];
+      if (!blocks.length) return;
+      const mermaidLib = await loadMermaid();
+      blocks.forEach((block, index) => {
+        const code = block.textContent;
+        const figure = document.createElement("figure");
+        figure.className = "mermaid-figure";
+        const diagram = document.createElement("div");
+        diagram.className = "mermaid";
+        diagram.id = "mermaid-diagram-" + index;
+        diagram.textContent = code;
+        const raw = document.createElement("details");
+        raw.className = "mermaid-raw";
+        raw.innerHTML = "<summary>查看 Mermaid 源码</summary><pre><code></code></pre>";
+        raw.querySelector("code").textContent = code;
+        figure.appendChild(diagram);
+        figure.appendChild(raw);
+        block.replaceWith(figure);
+      });
+      if (!mermaidLib) {
+        document.querySelectorAll(".mermaid-figure").forEach((figure) => {
+          const error = document.createElement("div");
+          error.className = "mermaid-error";
+          error.textContent = "Mermaid CDN 加载失败，已保留源码。";
+          figure.appendChild(error);
+        });
+        return;
+      }
+      mermaidLib.initialize({
+        startOnLoad: false,
+        securityLevel: "loose",
+        theme: "base",
+        themeVariables: {
+          fontFamily: "Microsoft YaHei, Noto Sans SC, system-ui, sans-serif",
+          fontSize: "15px",
+          primaryColor: "#f6f5f2",
+          primaryTextColor: "#242424",
+          primaryBorderColor: "#d8d5cb",
+          lineColor: "#6f6f6f",
+          secondaryColor: "#f0f5ff",
+          tertiaryColor: "#eef7f5",
+          noteBkgColor: "#fff8e7",
+          noteTextColor: "#242424"
+        },
+        flowchart: {
+          htmlLabels: true,
+          useMaxWidth: false,
+          curve: "basis",
+          nodeSpacing: 42,
+          rankSpacing: 54,
+          padding: 12
+        },
+        sequence: {
+          mirrorActors: false,
+          useMaxWidth: true
+        }
+      });
+      try {
+        await mermaidLib.run({ querySelector: ".mermaid" });
+      } catch (error) {
+        document.querySelectorAll(".mermaid-figure").forEach((figure) => {
+          if (figure.querySelector("svg")) return;
+          const box = document.createElement("div");
+          box.className = "mermaid-error";
+          box.textContent = "Mermaid 渲染失败：" + (error && error.message ? error.message : String(error));
+          figure.appendChild(box);
+        });
+      }
+    }
+    renderMermaid();
+  </script>
+</body>
+</html>

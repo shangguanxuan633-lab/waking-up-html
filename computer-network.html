@@ -1,0 +1,1289 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>计算机网络面试复习</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --paper: #ffffff;
+      --book: #fbfaf7;
+      --ink: #242424;
+      --muted: #686868;
+      --line: #e5e3dc;
+      --line-strong: #d8d5cb;
+      --blue: #315fbc;
+      --teal: #0f766e;
+      --amber: #9a6700;
+      --soft-blue: #f0f5ff;
+      --soft-teal: #ecfdf5;
+      --soft-amber: #fff8e7;
+      --soft-rose: #fff1f2;
+      --shadow: 0 10px 28px rgba(36, 36, 36, .06);
+      --book-shadow: 0 22px 70px rgba(36, 36, 36, .08);
+      --accent: var(--teal);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.74;
+      letter-spacing: 0;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 250, 247, .94);
+      backdrop-filter: blur(12px);
+    }
+    .topbar-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 10px 18px;
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(220px, 420px);
+      gap: 14px;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--soft-blue);
+      border: 1px solid var(--line-strong);
+      color: var(--blue);
+      flex: none;
+      font-size: 14px;
+    }
+    .brand span:last-child {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .searchbox {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+    }
+    .searchbox:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(49, 95, 188, .12);
+    }
+    .layout {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 18px 52px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+    .hero {
+      min-height: 360px;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(240, 245, 255, .86), rgba(236, 253, 245, .54) 48%, rgba(255, 248, 231, .82)),
+        var(--book);
+      box-shadow: var(--book-shadow);
+      display: grid;
+      gap: 22px;
+      align-content: end;
+    }
+    .eyebrow {
+      margin: 0;
+      color: var(--accent);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      max-width: 980px;
+    }
+    .hero-copy {
+      max-width: 980px;
+      margin: 0;
+      font-size: 18px;
+      color: #3e3e3e;
+    }
+    .meta-grid,
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .meta-item,
+    .stat-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .74);
+      padding: 12px;
+      min-width: 0;
+    }
+    .meta-item b,
+    .stat-item b {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .meta-item span,
+    .stat-item span {
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    .section > p {
+      margin: 8px 0 14px;
+      color: #424242;
+    }
+    .toc-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .toc-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--book);
+      color: var(--ink);
+      font-size: 14px;
+      max-width: 100%;
+    }
+    .toc-pill:hover,
+    .toc-pill.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .level-3 { background: #fff; }
+    .knowledge-list,
+    .diagram-grid,
+    .qa-grid,
+    .case-grid,
+    .code-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .knowledge-card,
+    .diagram-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--book);
+      padding: 16px;
+      min-width: 0;
+    }
+    .compact-card { background: #fff; }
+    .knowledge-title {
+      display: block;
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.42;
+      margin-bottom: 8px;
+    }
+    .knowledge-card p {
+      margin: 8px 0 0;
+      color: #3f3f3f;
+    }
+    .knowledge-note {
+      border-left: 3px solid var(--accent);
+      padding-left: 10px;
+      color: #555;
+      background: rgba(255, 255, 255, .58);
+    }
+    .diagram-card h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+    .diagram-caption {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .mermaid-figure {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow-x: auto;
+    }
+    .mermaid {
+      min-width: 620px;
+    }
+    .mermaid svg {
+      max-width: none;
+      height: auto;
+    }
+    .mermaid-raw {
+      margin-top: 10px;
+    }
+    .mermaid-raw summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .mermaid-error {
+      margin-top: 10px;
+      border: 1px solid #fecdd3;
+      border-radius: 8px;
+      background: var(--soft-rose);
+      color: #9f1239;
+      padding: 10px;
+    }
+    .source-material {
+      background: var(--paper);
+    }
+    .source-body {
+      max-width: 1060px;
+    }
+    .source-body h1,
+    .source-body h2,
+    .source-body h3,
+    .source-body h4 {
+      scroll-margin-top: 82px;
+      letter-spacing: 0;
+    }
+    .source-body h1 {
+      font-size: 34px;
+      margin: 4px 0 18px;
+    }
+    .source-body h2 {
+      font-size: 27px;
+      margin: 30px 0 12px;
+    }
+    .source-body h3 {
+      font-size: 22px;
+      margin: 28px 0 10px;
+      padding-top: 6px;
+      border-top: 1px solid var(--line);
+    }
+    .source-body h4,
+    .source-body h5,
+    .source-body h6 {
+      font-size: 18px;
+      margin: 22px 0 8px;
+    }
+    .source-body p {
+      margin: 10px 0;
+    }
+    .md-list {
+      display: grid;
+      gap: 6px;
+      margin: 10px 0 14px;
+    }
+    .md-list-row {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr);
+      gap: 7px;
+      align-items: start;
+    }
+    .md-list-row.depth-1 { padding-left: 20px; }
+    .md-list-row.depth-2 { padding-left: 40px; }
+    .md-list-row.depth-3 { padding-left: 60px; }
+    .md-list-row.depth-4 { padding-left: 80px; }
+    .md-list-row.depth-5 { padding-left: 100px; }
+    .md-marker {
+      color: var(--accent);
+      font-weight: 800;
+      text-align: right;
+    }
+    code {
+      font-family: Consolas, "Cascadia Code", "SFMono-Regular", monospace;
+      background: #f3f1ea;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 1px 5px;
+      font-size: .92em;
+    }
+    .code-block,
+    .mermaid-source,
+    .mermaid-raw pre {
+      margin: 12px 0;
+      padding: 14px;
+      overflow-x: auto;
+      background: #1f2937;
+      color: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #111827;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+    .code-block code,
+    .mermaid-source code,
+    .mermaid-raw code {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      color: inherit;
+    }
+    blockquote {
+      margin: 12px 0;
+      padding: 10px 14px;
+      border-left: 4px solid var(--accent);
+      background: var(--soft-amber);
+      color: #4b4638;
+    }
+    .source-detail {
+      margin: 12px 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+    }
+    .source-detail summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-weight: 800;
+    }
+    .source-figure,
+    .source-html-center {
+      margin: 16px 0;
+      text-align: center;
+    }
+    .avatar-figure {
+      display: inline-block;
+      margin: 6px;
+      vertical-align: middle;
+    }
+    .avatar-figure img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+    .source-figure img,
+    .inline-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .source-figure figcaption {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .source-link-wrap {
+      display: inline-block;
+      max-width: 100%;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+      min-width: 110px;
+    }
+    th {
+      background: var(--soft-blue);
+      text-align: left;
+    }
+    .license-note {
+      border: 1px solid var(--line-strong);
+      background: var(--soft-amber);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .hidden-by-search { display: none !important; }
+    .no-results {
+      display: none;
+      border: 1px solid #fecdd3;
+      background: var(--soft-rose);
+      color: #9f1239;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .no-results.visible { display: block; }
+    @media (max-width: 720px) {
+      .topbar-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .layout {
+        padding: 18px 12px 36px;
+      }
+      .hero,
+      .section {
+        padding: 18px;
+      }
+      h1 {
+        font-size: 34px;
+      }
+      .hero-copy {
+        font-size: 16px;
+      }
+      .md-list-row.depth-3,
+      .md-list-row.depth-4,
+      .md-list-row.depth-5 {
+        padding-left: 24px;
+      }
+      .mermaid {
+        min-width: 520px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="返回总览">
+        <span class="brand-mark">WU</span>
+        <span>计算机网络面试复习</span>
+      </a>
+      <input id="search" class="searchbox" type="search" placeholder="搜索本页知识点、追问、命令或章节">
+    </div>
+  </header>
+  <main class="layout">
+    <section class="hero" data-search-section>
+      <div>
+        <p class="eyebrow">Waking-Up HTML · GPLv3 Derived Review</p>
+        <h1>计算机网络面试复习</h1>
+      </div>
+      <p class="hero-copy">围绕 TCP/UDP、HTTP/HTTPS、DNS、IP、ARP、NAT、路由与版本演进做面试化梳理。</p>
+      <div class="meta-grid">
+        <div class="meta-item"><b>源文件</b><span>Computer Network.md</span></div>
+        <div class="meta-item"><b>源提交</b><span>cf692b5</span></div>
+        <div class="meta-item"><b>生成时间</b><span>2026/05/10 20:09:57 Asia/Shanghai</span></div>
+        <div class="meta-item"><b>授权</b><span>GPLv3，保留原作者与来源</span></div>
+      </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>资料入口</h2>
+      <div class="toc-row"><a class="toc-pill" href="index.html">总览</a><a class="toc-pill active" href="computer-network.html">计算机网络</a><a class="toc-pill" href="operating-systems.html">操作系统</a><a class="toc-pill" href="database.html">数据库</a><a class="toc-pill" href="design-pattern.html">设计模式</a><a class="toc-pill" href="git-commandline-rest.html">Git/REST/命令行</a><a class="toc-pill" href="python-handbook.html">Python</a></div>
+      <p>相关页：<a href="index.html">总览</a><a href="operating-systems.html">操作系统</a><a href="database.html">数据库</a><a href="design-pattern.html">设计模式</a><a href="git-commandline-rest.html">Git/REST/命令行</a><a href="python-handbook.html">Python</a></p>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>本页统计</h2>
+      <div class="stat-grid">
+        <div class="stat-item"><b>原文行数</b><span>453</span></div>
+        <div class="stat-item"><b>标题节点</b><span>38</span></div>
+        <div class="stat-item"><b>折叠追问</b><span>23</span></div>
+        <div class="stat-item"><b>图片</b><span>25</span></div>
+        <div class="stat-item"><b>代码块</b><span>0</span></div>
+        <div class="stat-item"><b>列表行</b><span>125</span></div>
+      </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>页内目录</h2>
+      <div class="toc-row">
+        <a class="toc-pill" href="#review-cards">逐章复习卡</a>
+        <a class="toc-pill" href="#visual-atlas">Mermaid 图谱</a>
+        <a class="toc-pill" href="#source-material">原文资料转写</a>
+        <a class="toc-pill" href="#review-plan">复习计划</a>
+        <a class="toc-pill level-1" href="#计算机网络">计算机网络</a><a class="toc-pill level-3" href="#什么是三次握手-three-way-handshake">什么是三次握手 (three-way handshake)？</a><a class="toc-pill level-3" href="#什么是四次挥手">什么是四次挥手？</a><a class="toc-pill level-3" href="#tcp如何实现流量控制">TCP如何实现流量控制？</a><a class="toc-pill level-3" href="#tcp的拥塞控制是怎么实现的">TCP的拥塞控制是怎么实现的？</a><a class="toc-pill level-3" href="#tcp如何最大利用带宽">TCP如何最大利用带宽？</a><a class="toc-pill level-3" href="#tcp与udp的区别">TCP与UDP的区别</a><a class="toc-pill level-3" href="#tcp如何保证传输的可靠性">TCP如何保证传输的可靠性</a><a class="toc-pill level-3" href="#http和https有什么区别">HTTP和HTTPS有什么区别？</a><a class="toc-pill level-3" href="#get与post的区别">GET与POST的区别？</a><a class="toc-pill level-3" href="#session与cookie的区别">Session与Cookie的区别？</a><a class="toc-pill level-3" href="#从输入网址到获得页面的过程-越详细越好">从输入网址到获得页面的过程 (越详细越好)？</a><a class="toc-pill level-3" href="#http请求有哪些常见状态码">HTTP请求有哪些常见状态码？</a><a class="toc-pill level-3" href="#什么是rip-routing-information-protocol-距离矢量路由协议-算法是什么">什么是RIP (Routing Information Protocol, 距离矢量路由协议)? 算法是什么？</a><a class="toc-pill level-3" href="#计算机网络体系结构">计算机网络体系结构</a><a class="toc-pill level-3" href="#ip地址的分类">IP地址的分类？</a><a class="toc-pill level-3" href="#什么叫划分子网">什么叫划分子网？</a><a class="toc-pill level-3" href="#什么是arp协议-address-resolution-protocol">什么是ARP协议 (Address Resolution Protocol)？</a><a class="toc-pill level-3" href="#什么是nat-network-address-translation-网络地址转换">什么是NAT (Network Address Translation, 网络地址转换)？</a><a class="toc-pill level-2" href="#http各版本">HTTP各版本</a><a class="toc-pill level-3" href="#参考">参考</a>
+      </div>
+    </section>
+
+    
+
+    <section class="section" data-search-section>
+      <h2>能力地图</h2>
+      <ul class="knowledge-list">
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P4/P5</b>
+      <p>能准确复述概念、常见流程、基本优缺点，回答不混淆术语。</p>
+      <p class="knowledge-note">注释：复习 计算机网络 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P6</b>
+      <p>能把概念和机制连起来，说明常见失败场景、复杂度、边界条件。</p>
+      <p class="knowledge-note">注释：复习 计算机网络 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P7</b>
+      <p>能结合生产指标、命令、日志、容量和取舍，主动补充排障证据。</p>
+      <p class="knowledge-note">注释：复习 计算机网络 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P8/P9</b>
+      <p>能从系统设计、平台治理、风险控制和团队规范层面讲清可落地方案。</p>
+      <p class="knowledge-note">注释：复习 计算机网络 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  </ul>
+    </section>
+
+    <section id="review-cards" class="section" data-search-section>
+      <h2>逐章复习卡</h2>
+      <p>下面按原文标题一对一生成复习卡，不替代原文，而是帮你把每个章节转成面试表达路径。</p>
+      <ul class="knowledge-list">
+    <li class="knowledge-card" data-search="什么是三次握手 (three-way handshake)？ network">
+      <b class="knowledge-title">1. 什么是三次握手 (three-way handshake)？</b>
+      <p>原文对应章节：<a href="#什么是三次握手-three-way-handshake">什么是三次握手 (three-way handshake)？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：答题时别只背流程，要补上序列号/确认号的目的、失败重传、队列与线上状态证据，例如 ss、tcpdump、连接池日志。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是四次挥手？ network">
+      <b class="knowledge-title">2. 什么是四次挥手？</b>
+      <p>原文对应章节：<a href="#什么是四次挥手">什么是四次挥手？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：答题时别只背流程，要补上序列号/确认号的目的、失败重传、队列与线上状态证据，例如 ss、tcpdump、连接池日志。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="TCP如何实现流量控制？ network">
+      <b class="knowledge-title">3. TCP如何实现流量控制？</b>
+      <p>原文对应章节：<a href="#tcp如何实现流量控制">TCP如何实现流量控制？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：答题时别只背流程，要补上序列号/确认号的目的、失败重传、队列与线上状态证据，例如 ss、tcpdump、连接池日志。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="TCP的拥塞控制是怎么实现的？ network">
+      <b class="knowledge-title">4. TCP的拥塞控制是怎么实现的？</b>
+      <p>原文对应章节：<a href="#tcp的拥塞控制是怎么实现的">TCP的拥塞控制是怎么实现的？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：答题时别只背流程，要补上序列号/确认号的目的、失败重传、队列与线上状态证据，例如 ss、tcpdump、连接池日志。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="TCP如何最大利用带宽？ network">
+      <b class="knowledge-title">5. TCP如何最大利用带宽？</b>
+      <p>原文对应章节：<a href="#tcp如何最大利用带宽">TCP如何最大利用带宽？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：答题时别只背流程，要补上序列号/确认号的目的、失败重传、队列与线上状态证据，例如 ss、tcpdump、连接池日志。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="TCP与UDP的区别 network">
+      <b class="knowledge-title">6. TCP与UDP的区别</b>
+      <p>原文对应章节：<a href="#tcp与udp的区别">TCP与UDP的区别</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：答题时别只背流程，要补上序列号/确认号的目的、失败重传、队列与线上状态证据，例如 ss、tcpdump、连接池日志。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="TCP如何保证传输的可靠性 network">
+      <b class="knowledge-title">7. TCP如何保证传输的可靠性</b>
+      <p>原文对应章节：<a href="#tcp如何保证传输的可靠性">TCP如何保证传输的可靠性</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：答题时别只背流程，要补上序列号/确认号的目的、失败重传、队列与线上状态证据，例如 ss、tcpdump、连接池日志。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="HTTP和HTTPS有什么区别？ network">
+      <b class="knowledge-title">8. HTTP和HTTPS有什么区别？</b>
+      <p>原文对应章节：<a href="#http和https有什么区别">HTTP和HTTPS有什么区别？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：用“语义 -&gt; 报文/状态 -&gt; 缓存/安全 -&gt; 代理/CDN -&gt; 排障证据”展开，能自然接住版本演进和线上慢请求追问。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="GET与POST的区别？ network">
+      <b class="knowledge-title">9. GET与POST的区别？</b>
+      <p>原文对应章节：<a href="#get与post的区别">GET与POST的区别？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：用“语义 -&gt; 报文/状态 -&gt; 缓存/安全 -&gt; 代理/CDN -&gt; 排障证据”展开，能自然接住版本演进和线上慢请求追问。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="Session与Cookie的区别？ network">
+      <b class="knowledge-title">10. Session与Cookie的区别？</b>
+      <p>原文对应章节：<a href="#session与cookie的区别">Session与Cookie的区别？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：用“语义 -&gt; 报文/状态 -&gt; 缓存/安全 -&gt; 代理/CDN -&gt; 排障证据”展开，能自然接住版本演进和线上慢请求追问。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="从输入网址到获得页面的过程 (越详细越好)？ network">
+      <b class="knowledge-title">11. 从输入网址到获得页面的过程 (越详细越好)？</b>
+      <p>原文对应章节：<a href="#从输入网址到获得页面的过程-越详细越好">从输入网址到获得页面的过程 (越详细越好)？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="HTTP请求有哪些常见状态码？ network">
+      <b class="knowledge-title">12. HTTP请求有哪些常见状态码？</b>
+      <p>原文对应章节：<a href="#http请求有哪些常见状态码">HTTP请求有哪些常见状态码？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：用“语义 -&gt; 报文/状态 -&gt; 缓存/安全 -&gt; 代理/CDN -&gt; 排障证据”展开，能自然接住版本演进和线上慢请求追问。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是RIP (Routing Information Protocol, 距离矢量路由协议)? 算法是什么？ network">
+      <b class="knowledge-title">13. 什么是RIP (Routing Information Protocol, 距离矢量路由协议)? 算法是什么？</b>
+      <p>原文对应章节：<a href="#什么是rip-routing-information-protocol-距离矢量路由协议-算法是什么">什么是RIP (Routing Information Protocol, 距离矢量路由协议)? 算法是什么？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：用“语义 -&gt; 报文/状态 -&gt; 缓存/安全 -&gt; 代理/CDN -&gt; 排障证据”展开，能自然接住版本演进和线上慢请求追问。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="计算机网络体系结构 network">
+      <b class="knowledge-title">14. 计算机网络体系结构</b>
+      <p>原文对应章节：<a href="#计算机网络体系结构">计算机网络体系结构</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="IP地址的分类？ network">
+      <b class="knowledge-title">15. IP地址的分类？</b>
+      <p>原文对应章节：<a href="#ip地址的分类">IP地址的分类？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：用“语义 -&gt; 报文/状态 -&gt; 缓存/安全 -&gt; 代理/CDN -&gt; 排障证据”展开，能自然接住版本演进和线上慢请求追问。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么叫划分子网？ network">
+      <b class="knowledge-title">16. 什么叫划分子网？</b>
+      <p>原文对应章节：<a href="#什么叫划分子网">什么叫划分子网？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是ARP协议 (Address Resolution Protocol)？ network">
+      <b class="knowledge-title">17. 什么是ARP协议 (Address Resolution Protocol)？</b>
+      <p>原文对应章节：<a href="#什么是arp协议-address-resolution-protocol">什么是ARP协议 (Address Resolution Protocol)？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：用“语义 -&gt; 报文/状态 -&gt; 缓存/安全 -&gt; 代理/CDN -&gt; 排障证据”展开，能自然接住版本演进和线上慢请求追问。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是NAT (Network Address Translation, 网络地址转换)？ network">
+      <b class="knowledge-title">18. 什么是NAT (Network Address Translation, 网络地址转换)？</b>
+      <p>原文对应章节：<a href="#什么是nat-network-address-translation-网络地址转换">什么是NAT (Network Address Translation, 网络地址转换)？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：用“语义 -&gt; 报文/状态 -&gt; 缓存/安全 -&gt; 代理/CDN -&gt; 排障证据”展开，能自然接住版本演进和线上慢请求追问。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="HTTP各版本 network">
+      <b class="knowledge-title">19. HTTP各版本</b>
+      <p>原文对应章节：<a href="#http各版本">HTTP各版本</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：用“语义 -&gt; 报文/状态 -&gt; 缓存/安全 -&gt; 代理/CDN -&gt; 排障证据”展开，能自然接住版本演进和线上慢请求追问。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="参考 network">
+      <b class="knowledge-title">20. 参考</b>
+      <p>原文对应章节：<a href="#参考">参考</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  </ul>
+    </section>
+
+    <section id="visual-atlas" class="section" data-search-section>
+      <h2>Mermaid 图谱</h2>
+      <div class="diagram-grid">
+    <article class="diagram-card" data-search="计算机网络 章节路线 从原始 Markdown 标题提取，保留一对一章节顺序。 roadmap network">
+      <h3>计算机网络 章节路线</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+  n1[&quot;1. 什么是三次握手 (three-way handshake)？&quot;]
+  n2[&quot;2. 什么是四次挥手？&quot;]
+  n1 --&gt; n2
+  n3[&quot;3. TCP如何实现流量控制？&quot;]
+  n2 --&gt; n3
+  n4[&quot;4. TCP的拥塞控制是怎么实现的？&quot;]
+  n3 --&gt; n4
+  n5[&quot;5. TCP如何最大利用带宽？&quot;]
+  n4 --&gt; n5
+  n6[&quot;6. TCP与UDP的区别&quot;]
+  n5 --&gt; n6
+  n7[&quot;7. TCP如何保证传输的可靠性&quot;]
+  n6 --&gt; n7
+  n8[&quot;8. HTTP和HTTPS有什么区别？&quot;]
+  n7 --&gt; n8
+  n9[&quot;9. GET与POST的区别？&quot;]
+  n8 --&gt; n9
+  n10[&quot;10. Session与Cookie的区别？&quot;]
+  n9 --&gt; n10
+  n11[&quot;11. 从输入网址到获得页面的过程 (越详细越好)？&quot;]
+  n10 --&gt; n11
+  n12[&quot;12. HTTP请求有哪些常见状态码？&quot;]
+  n11 --&gt; n12</code></pre>
+      <p class="diagram-caption">从原始 Markdown 标题提取，保留一对一章节顺序。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="面试回答闭环 每个知识点都按这个闭环复习，能从背诵切到工程表达。 answer interview">
+      <h3>面试回答闭环</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+      A[&quot;一句话定义&quot;] --&gt; B[&quot;为什么存在&quot;]
+      B --&gt; C[&quot;核心机制&quot;]
+      C --&gt; D[&quot;生产场景&quot;]
+      D --&gt; E[&quot;指标/命令/证据&quot;]
+      E --&gt; F[&quot;取舍与边界&quot;]
+      F --&gt; G[&quot;高频追问&quot;]</code></pre>
+      <p class="diagram-caption">每个知识点都按这个闭环复习，能从背诵切到工程表达。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="一次请求的网络链路 把网络题串成请求链路，适合回答“从输入 URL 到页面展示”。 network">
+      <h3>一次请求的网络链路</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+        A[&quot;输入 URL&quot;] --&gt; B[&quot;DNS 解析&quot;]
+        B --&gt; C[&quot;TCP/QUIC 建连&quot;]
+        C --&gt; D[&quot;TLS/HTTPS&quot;]
+        D --&gt; E[&quot;HTTP 请求&quot;]
+        E --&gt; F[&quot;网关/CDN/服务端&quot;]
+        F --&gt; G[&quot;响应/缓存/渲染&quot;]</code></pre>
+      <p class="diagram-caption">把网络题串成请求链路，适合回答“从输入 URL 到页面展示”。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="TCP 可靠传输核心 TCP 不只是握手流程，还包括可靠、有序、限速和释放。 tcp">
+      <h3>TCP 可靠传输核心</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart TB
+        SYN[&quot;三次握手&lt;br/&gt;同步序列号&quot;] --&gt; EST[&quot;ESTABLISHED&lt;br/&gt;全双工传输&quot;]
+        EST --&gt; WIN[&quot;滑动窗口&lt;br/&gt;流量控制&quot;]
+        EST --&gt; RETRY[&quot;ACK/重传&lt;br/&gt;可靠性&quot;]
+        EST --&gt; CC[&quot;拥塞控制&lt;br/&gt;慢启动/避免/恢复&quot;]
+        EST --&gt; FIN[&quot;四次挥手&lt;br/&gt;半关闭与 TIME_WAIT&quot;]</code></pre>
+      <p class="diagram-caption">TCP 不只是握手流程，还包括可靠、有序、限速和释放。</p>
+    </article>
+  </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>Mermaid 渲染说明</h2>
+      <ul class="knowledge-list">
+        <li class="knowledge-card">
+          <b class="knowledge-title">离线阅读与源码保底</b>
+          <p>页面会尝试从 jsDelivr 和 unpkg 加载 Mermaid，并使用 <code>mermaid.initialize</code> 与 <code>mermaid.run</code> 渲染图谱。</p>
+          <p class="knowledge-note">注释：如果网络不可用，原始 Mermaid 源码仍然保留在 <code>mermaid-raw</code> 折叠块里，不会影响正文阅读。</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="source-material" class="section source-material" data-search-section>
+      <h2>原文资料转写</h2>
+      <p>以下内容从原始 Markdown 转为 HTML，并保留原有目录、图片、折叠追问、代码与参考链接。</p>
+      <div class="source-body"><h1 id="计算机网络">计算机网络</h1>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div>传输层：TCP和UDP</div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#什么是三次握手-three-way-handshake">什么是三次握手？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#什么是四次挥手">什么是四次挥手？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#tcp如何实现流量控制">TCP如何实现流量控制？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#tcp的拥塞控制是怎么实现的">TCP的拥塞控制是怎么实现的？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#tcp如何最大利用带宽">TCP如何最大利用带宽？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#tcp与udp的区别">TCP与UDP的区别</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#tcp如何保证传输的可靠性">TCP如何保证传输的可靠性</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#什么是tcp粘包">什么是TCP粘包？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div>应用层：HTTP和HTTPS</div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#http和https有什么区别">HTTP和HTTPS有什么区别？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#get与post的区别">GET与POST的区别？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#session与cookie的区别">Session与Cookie的区别？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#从输入网址到获得页面的过程-越详细越好">从输入网址到获得页面的过程 (越详细越好)？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#http请求有哪些常见状态码">HTTP请求有哪些常见状态码？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#什么是rip-routing-information-protocol-距离矢量路由协议-算法是什么">什么是RIP (距离矢量路由协议)?</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#计算机网络体系结构">计算机网络体系结构</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div>网络层协议</div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#ip地址的分类">IP地址的分类？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#什么叫划分子网">什么叫划分子网？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#什么是arp协议-address-resolution-protocol">什么是ARP协议？</a></div></div>
+<div class="md-list-row depth-2"><span class="md-marker">*</span><div><a href="#什么是nat-network-address-translation-网络地址转换">什么是NAT (网络地址转换)？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#参考">参考</a></div></div>
+</div>
+<hr>
+<h3 id="什么是三次握手-three-way-handshake">什么是三次握手 (three-way handshake)？</h3>
+<figure class="source-figure"><img src="_v_images/image-20221212004219997.png" alt="image-20221212004219997"><figcaption>image-20221212004219997</figcaption></figure>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>第一次握手：Client将SYN置1，随机产生一个初始序列号seq发送给Server，进入SYN_SENT状态；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>第二次握手：Server收到Client的SYN=1之后，知道客户端请求建立连接，将自己的SYN置1，ACK置1，产生一个acknowledge number=sequence number+1，并随机产生一个自己的初始序列号，发送给客户端；进入SYN_RCVD状态；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>第三次握手：客户端检查acknowledge number是否为序列号+1，ACK是否为1，检查正确之后将自己的ACK置为1，产生一个acknowledge number=服务器发的序列号+1，发送给服务器；进入ESTABLISHED状态；服务器检查ACK为1和acknowledge number为序列号+1之后，也进入ESTABLISHED状态；完成三次握手，连接建立。</div></div>
+</div>
+<h5 id="tcp建立连接可以两次握手吗-为什么">TCP建立连接可以两次握手吗？为什么?</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>不可以。有两个原因：</p>
+<p>首先，可能会出现<strong>已失效的连接请求报文段又传到了服务器端</strong>。</p>
+<blockquote>client 发出的第一个连接请求报文段并没有丢失，而是在某个网络结点长时间的滞留了，以致延误到连接释放以后的某个时间才到达 server。本来这是一个早已失效的报文段。但 server 收到此失效的连接请求报文段后，就误认为是 client 再次发出的一个新的连接请求。于是就向 client 发出确认报文段，同意建立连接。假设不采用 “三次握手”，那么只要 server 发出确认，新的连接就建立了。由于现在 client 并没有发出建立连接的请求，因此不会理睬 server 的确认，也不会向 server 发送数据。但 server 却以为新的运输连接已经建立，并一直等待 client 发来数据。这样，server 的很多资源就白白浪费掉了。采用 “三次握手” 的办法可以防止上述现象发生。例如刚才那种情况，client 不会向 server 的确认发出确认。server 由于收不到确认，就知道 client 并没有要求建立连接。</blockquote>
+<p>其次，两次握手无法保证Client正确接收第二次握手的报文（Server无法确认Client是否收到），也无法保证Client和Server之间成功互换初始序列号。</p>
+<p>还有就是两次握手会给SYN flood攻击提供机会。 扩展阅读： 什么是SYN攻击？https://zhuanlan.zhihu.com/p/360479307</p>
+</details>
+<h5 id="可以采用四次握手吗-为什么">可以采用四次握手吗？为什么？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>可以。但是会降低传输的效率。</p>
+<p>四次握手是指：第二次握手：Server只发送ACK和acknowledge number；而Server的SYN和初始序列号在第三次握手时发送；原来协议中的第三次握手变为第四次握手。出于优化目的，四次握手中的二、三可以合并。</p>
+</details>
+<h5 id="第三次握手中-如果客户端的ack未送达服务器-会怎样">第三次握手中，如果客户端的ACK未送达服务器，会怎样？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>Server端：   由于Server没有收到ACK确认，因此会重发之前的SYN+ACK（默认重发五次，之后自动关闭连接进入CLOSED状态），Client收到后会重新传ACK给Server。</p>
+<p>Client端，两种情况：  </p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">1.</span><div>在Server进行超时重发的过程中，如果Client向服务器发送数据，数据头部的ACK是为1的，所以服务器收到数据之后会读取 ACK number，进入 establish 状态  </div></div>
+<div class="md-list-row depth-0"><span class="md-marker">2.</span><div>在Server进入CLOSED状态之后，如果Client向服务器发送数据，服务器会以RST包应答。</div></div>
+</div>
+</details>
+<h5 id="如果已经建立了连接-但客户端出现了故障怎么办">如果已经建立了连接，但客户端出现了故障怎么办？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>服务器每收到一次客户端的请求后都会重新复位一个计时器，时间通常是设置为2小时，若两小时还没有收到客户端的任何数据，服务器就会发送一个探测报文段，以后每隔75秒钟发送一次。若一连发送10个探测报文仍然没反应，服务器就认为客户端出了故障，接着就关闭连接。</p>
+</details>
+<h5 id="初始序列号是什么">初始序列号是什么？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>TCP连接的一方A，随机选择一个32位的序列号（Sequence Number）作为发送数据的初始序列号（Initial Sequence Number，ISN），比如为1000，以该序列号为原点，对要传送的数据进行编号：1001、1002...三次握手时，把这个初始序列号传送给另一方B，以便在传输数据时，B可以确认什么样的数据编号是合法的；同时在进行数据传输时，A还可以确认B收到的每一个字节，如果A收到了B的确认编号（acknowledge number）是2001，就说明编号为1001-2000的数据已经被B成功接受。</p>
+</details>
+<h3 id="什么是四次挥手">什么是四次挥手？</h3>
+<figure class="source-figure"><img src="_v_images/image-20221212004254912.png" alt="image-20221212004254912"><figcaption>image-20221212004254912</figcaption></figure>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>第一次挥手：Client将FIN置为1，发送一个序列号seq给Server；进入FIN_WAIT_1状态；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>第二次挥手：Server收到FIN之后，发送一个ACK=1，acknowledge number=收到的序列号+1；进入CLOSE_WAIT状态。此时客户端已经没有要发送的数据了，但仍可以接受服务器发来的数据。</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>第三次挥手：Server将FIN置1，发送一个序列号给Client；进入LAST_ACK状态；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>第四次挥手：Client收到服务器的FIN后，进入TIME_WAIT状态；接着将ACK置1，发送一个acknowledge number=序列号+1给服务器；服务器收到后，确认acknowledge number后，变为CLOSED状态，不再向客户端发送数据。客户端等待2*MSL（报文段最长寿命）时间后，也进入CLOSED状态。完成四次挥手。</div></div>
+</div>
+<h5 id="为什么不能把服务器发送的ack和fin合并起来-变成三次挥手-closewait状态意义是什么">为什么不能把服务器发送的ACK和FIN合并起来，变成三次挥手（CLOSE_WAIT状态意义是什么）？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>因为服务器收到客户端断开连接的请求时，可能还有一些数据没有发完，这时先回复ACK，表示接收到了断开连接的请求。等到数据发完之后再发FIN，断开服务器到客户端的数据传送。</p>
+</details>
+<h5 id="如果第二次挥手时服务器的ack没有送达客户端-会怎样">如果第二次挥手时服务器的ACK没有送达客户端，会怎样？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>客户端没有收到ACK确认，会重新发送FIN请求。</p>
+</details>
+<h5 id="客户端timewait状态的意义是什么">客户端TIME_WAIT状态的意义是什么？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>第四次挥手时，客户端发送给服务器的ACK有可能丢失，TIME_WAIT状态就是用来重发可能丢失的ACK报文。如果Server没有收到ACK，就会重发FIN，如果Client在2*MSL的时间内收到了FIN，就会重新发送ACK并再次等待2MSL，防止Server没有收到ACK而不断重发FIN。</p>
+<p>MSL(Maximum Segment Lifetime)，指一个片段在网络中最大的存活时间，2MSL就是一个发送和一个回复所需的最大时间。如果直到2MSL，Client都没有再次收到FIN，那么Client推断ACK已经被成功接收，则结束TCP连接。</p>
+</details>
+<h3 id="tcp如何实现流量控制">TCP如何实现流量控制？</h3>
+<figure class="source-figure"><img src="_v_images/20191129145400104_2106.png" alt="滑动窗口"><figcaption>滑动窗口</figcaption></figure>
+<p>使用滑动窗口协议实现流量控制。防止发送方发送速率太快，接收方缓存区不够导致溢出。接收方会维护一个接收窗口 receiver window（窗口大小单位是字节），接受窗口的大小是根据自己的资源情况动态调整的，在返回ACK时将接受窗口大小放在TCP报文中的窗口字段告知发送方。发送窗口的大小不能超过接受窗口的大小，只有当发送方发送并收到确认之后，才能将发送窗口右移。</p>
+<p>发送窗口的上限为接受窗口和拥塞窗口中的较小值。接受窗口表明了接收方的接收能力，拥塞窗口表明了网络的传送能力。</p>
+<figure class="source-figure"><img src="_v_images/1615897397.gif" alt="滑动窗口"><figcaption>滑动窗口</figcaption></figure>
+<h5 id="什么是零窗口-接收窗口为0时会怎样">什么是零窗口（接收窗口为0时会怎样）？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>如果接收方没有能力接收数据，就会将接收窗口设置为0，这时发送方必须暂停发送数据，但是会启动一个持续计时器(persistence timer)，到期后发送一个大小为1字节的探测数据包，以查看接收窗口状态。如果接收方能够接收数据，就会在返回的报文中更新接收窗口大小，恢复数据传送。</p>
+</details>
+<h3 id="tcp的拥塞控制是怎么实现的">TCP的拥塞控制是怎么实现的？</h3>
+<figure class="source-figure"><img src="_v_images/image-20221216125001462.png" alt="拥塞控制"><figcaption>拥塞控制</figcaption></figure>
+<p>拥塞控制主要由四个算法组成：<strong>慢启动（Slow Start）、拥塞避免（Congestion voidance）、快重传 （Fast Retransmit）、快恢复（Fast Recovery）</strong></p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">1.</span><div>慢启动：刚开始发送数据时，先把拥塞窗口（congestion window）设置为一个最大报文段MSS的数值，每收到一个新的确认报文之后，就把拥塞窗口加1个MSS。这样每经过一个传输轮次（或者说是每经过一个往返时间RTT），拥塞窗口的大小就会加倍</div></div>
+</div>
+<figure class="source-figure"><img src="_v_images/image-20221216124728525.png" alt="慢启动"><figcaption>慢启动</figcaption></figure>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">2.</span><div>拥塞避免：当拥塞窗口的大小达到慢开始门限(slow start threshold)时，开始执行拥塞避免算法，拥塞窗口大小不再指数增加，而是线性增加，即每经过一个传输轮次只增加1MSS.  </div></div>
+</div>
+<blockquote>无论在慢开始阶段还是在拥塞避免阶段，只要发送方判断网络出现拥塞（其根据就是没有收到确认），就要把慢开始门限ssthresh设置为出现拥塞时的发送方窗口值的一半（但不能小于2）。然后把拥塞窗口cwnd重新设置为1，执行慢开始算法。<strong>（这是不使用快重传的情况）</strong></blockquote>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">3.</span><div>快重传：快重传要求接收方在收到一个失序的报文段后就立即发出<strong>重复确认</strong>（为的是使发送方及早知道有报文段没有到达对方）而不要等到自己发送数据时捎带确认。快重传算法规定，发送方只要一连收到三个重复确认就应当立即重传对方尚未收到的报文段，而不必继续等待设置的重传计时器时间到期。</div></div>
+</div>
+<figure class="source-figure"><img src="_v_images/image-20221216124900832.png" alt="快重传"><figcaption>快重传</figcaption></figure>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">4.</span><div>快恢复：当发送方连续收到三个重复确认时，就把慢开始门限减半，然后执行拥塞避免算法。不执行慢开始算法的原因：因为如果网络出现拥塞的话就不会收到好几个重复的确认，所以发送方认为现在网络可能没有出现拥塞。  </div></div>
+<p>也有的快重传是把开始时的拥塞窗口cwnd值再增大一点，即等于 ssthresh + 3*MSS 。这样做的理由是：既然发送方收到三个重复的确认，就表明有三个分组已经离开了网络。这三个分组不再消耗网络的资源而是停留在接收方的缓存中。可见现在网络中减少了三个分组。因此可以适当把拥塞窗口扩大些。</p>
+</div>
+<h3 id="tcp如何最大利用带宽">TCP如何最大利用带宽？</h3>
+<p>TCP速率受到三个因素影响</p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>窗口：即滑动窗口大小，见<a href="#tcp如何实现流量控制">TCP如何实现流量控制？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>带宽：这里带宽是指单位时间内从发送端到接收端所能通过的“最高数据率”，是一种硬件限制。TCP发送端和接收端的数据传输数不可能超过两点间的带宽限制。发送端和接收端之间带宽取所通过线路的带宽最小值（如通过互联网连接）。</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>RTT：即Round Trip Time，表示从发送端到接收端的一去一回需要的时间，TCP在数据传输过程中会对RTT进行采样（即对发送的数据包及其ACK的时间差进行测量，并根据测量值更新RTT值），TCP根据得到的RTT值更新RTO值，即Retransmission TimeOut，就是重传间隔，发送端对每个发出的数据包进行计时，如果在RTO时间内没有收到所发出的数据包的对应ACK，则任务数据包丢失，将重传数据。一般RTO值都比采样得到的RTT值要大。</div></div>
+</div>
+<details class="source-detail">
+<summary>带宽时延乘积</summary>
+<p>带宽时延乘积=带宽*RTT，实际上等于发送端到接收端单向通道的数据容积的两倍，这里单向通道的数据容积可以这样来理解，单向通道看成是一条单行道马路，带宽就是马路的车道数，路上跑的汽车就是数据（不过这里所有汽车的速率都是一样的，且不会有人想超车，大家齐头并进），那么单向通道的数据容积就是这条单行道上摆满车，一共可以摆多少辆。带宽就是马路的车道数，带宽数乘以单向通道的数据容积就是路面上所能容纳的全部数据量。当路面上已经摆满的时候，就不能再往里面放了。</p>
+</details>
+<p>设滑动窗口大小为<img class="inline-img" src="https://latex.codecogs.com/svg.latex?W" alt="">， 发送端和接收端的带宽为<img class="inline-img" src="https://latex.codecogs.com/svg.latex?B" alt="">， RTT为<img class="inline-img" src="https://latex.codecogs.com/svg.latex?T_r" alt="">。</p>
+<p>前面已经说过了，TCP发送数据时受滑动窗口的限制，当TCP将滑动窗口中的数据都发出后，在收到第一个ACK之前，滑动窗口大小是0，不能再发送数据了，必须等待ACK包使滑动窗口移动。那么在理想情况下，ACK包应该在什么时候到达呢？显然，就是在数据发出后的RTT时间后，ACK包到达。这也就是说，现在在不考虑丢包和拥塞情况下，TCP在一个RTT时间内能发出的最大数据量为 <img class="inline-img" src="http://latex.codecogs.com/gif.latex?W" alt=""> ，所以不考虑带宽限制下，TCP能一个时刻能达到的最大速度是 <img class="inline-img" src="https://latex.codecogs.com/svg.latex?V=\frac{W}{T_r}" alt="">。</p>
+<p>现在再考虑带宽限制，前面说过当马路上摆满车的时候，就无法再往里放车了，同理，TCP发送端在 <img class="inline-img" src="https://latex.codecogs.com/svg.latex?\frac{T_r}{2}" alt=""> 时间内，能往通道上放的最大数据量为 <img class="inline-img" src="https://latex.codecogs.com/svg.latex?\frac{V*T_r}{2}" alt=""> ，通过带宽时延乘积得到的容积限制为 <img class="inline-img" src="https://latex.codecogs.com/svg.latex?\frac{B*T_r}{2}" alt="">。当 <img class="inline-img" src="https://latex.codecogs.com/svg.latex?\frac{B*T_r}{2}%20\geq%20\frac{V*T_r}{2}" alt=""> 时，单向通道容积不构成瓶颈，速率的限制主要来源于窗口大小限制。而当 <img class="inline-img" src="https://latex.codecogs.com/svg.latex?\frac{V*T_r}{2}%20\geq%20\frac{B*T_r}{2}" alt=""> 时，则就受到容积限制，即此时速率限制来源于带宽限制。</p>
+<p>因此，TCP的最大速率为 <img class="inline-img" src="https://latex.codecogs.com/svg.latex?V%20=%20\min{(\frac{W}{T_r},%20B" alt="">})</p>
+<p>在我们平时生活中使用的宽带网络，ADSL等环境下，因为带宽都比较小，从而 <img class="inline-img" src="https://latex.codecogs.com/svg.latex?B*T_r" alt=""> 也比较小，再加上网络情况比较复杂，拥塞情况比较常见，所以这些网络环境下，TCP速率的主要限制因素在于带宽，丢包率等。长肥管道一般不太常见，多见于一些单位使用的专线网络，在这些网络中速率的主要限制因素就是窗口大小了，这也是传统TCP在这些网络环境中不能充分利用带宽的原因所在（因为传统TCP的窗口大小是用2字节表示的，所以最大只有65535（不考虑窗口扩大选项）），除了专线网络外，随着网络硬件技术的发展，万兆交换机的出现，局域网中也可能会出现带宽时延乘积较大的情况。</p>
+<h3 id="tcp与udp的区别">TCP与UDP的区别</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">1.</span><div>TCP是面向连接的，UDP是无连接的；</div></div>
+</div>
+<details class="source-detail">
+<summary>什么叫无连接？</summary>
+<p>UDP发送数据之前不需要建立连接</p>
+</details>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">2.</span><div>TCP是可靠的，UDP不可靠；</div></div>
+</div>
+<details class="source-detail">
+<summary>什么叫不可靠？</summary>
+<p>UDP接收方收到报文后，不需要给出任何确认</p>
+</details>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">3.</span><div>TCP只支持点对点通信，UDP支持一对一、一对多、多对一、多对多；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">4.</span><div>TCP是面向字节流的，UDP是面向报文的；</div></div>
+</div>
+<details class="source-detail">
+<summary>什么意思？</summary>
+<p>面向字节流是指发送数据时以字节为单位，一个数据包可以拆分成若干组进行发送，而UDP一个报文只能一次发完。</p>
+</details>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">5.</span><div>TCP有拥塞控制机制，UDP没有。网络出现的拥塞不会使源主机的发送速率降低，这对某些实时应用是很重要的，比如媒体通信，游戏；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">6.</span><div>TCP首部开销（20字节）比UDP首部开销（8字节）要大</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">7.</span><div>UDP 的主机不需要维持复杂的连接状态表</div></div>
+</div>
+<h5 id="什么时候选择tcp-什么时候选udp">什么时候选择TCP，什么时候选UDP？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>对某些实时性要求比较高的情况，选择UDP，比如游戏，媒体通信，实时视频流（直播），即使出现传输错误也可以容忍；其它大部分情况下，HTTP都是用TCP，因为要求传输的内容可靠，不出现丢失</p>
+</details>
+<h5 id="http可以使用udp吗">HTTP可以使用UDP吗？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>HTTP不可以使用UDP，HTTP需要基于可靠的传输协议，而UDP不可靠</p>
+<p>注：<strong>http 3.0 使用udp实现</strong> https://zh.wikipedia.org/wiki/HTTP/3</p>
+</details>
+<h5 id="面向连接和无连接的区别">面向连接和无连接的区别</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>无连接的网络服务（数据报服务）-- 面向连接的网络服务（虚电路服务）</p>
+<p>虚电路服务：首先建立连接，所有的数据包经过相同的路径，服务质量有较好的保证；</p>
+<p>数据报服务：每个数据包含目的地址，数据路由相互独立（路径可能变化）；网络尽最大努力交付数据，但不保证不丢失、不保证先后顺序、不保证在时限内交付；网络发生拥塞时，可能会将一些分组丢弃；</p>
+<figure class="source-figure"><img src="_v_images/20191201081919108_30577.png" alt="virtual circuit"><figcaption>virtual circuit</figcaption></figure>
+</details>
+<h3 id="tcp如何保证传输的可靠性">TCP如何保证传输的可靠性</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">1.</span><div>数据包校验</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">2.</span><div>对失序数据包重新排序（TCP报文具有序列号）</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">3.</span><div>丢弃重复数据</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">4.</span><div>应答机制：接收方收到数据之后，会发送一个确认（通常延迟几分之一秒）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">5.</span><div>超时重发：发送方发出数据之后，启动一个定时器，超时未收到接收方的确认，则重新发送这个数据；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">6.</span><div>流量控制：确保接收端能够接收发送方的数据而不会缓冲区溢出</div></div>
+</div>
+<h3 id="http和https有什么区别">HTTP和HTTPS有什么区别？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">1.</span><div>端口不同：HTTP使用的是80端口，HTTPS使用443端口；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">2.</span><div>HTTP（超文本传输协议）信息是明文传输，HTTPS运行在SSL(Secure Socket Layer)之上，添加了加密和认证机制，更加安全；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">3.</span><div>HTTPS由于加密解密会带来更大的CPU和内存开销；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">4.</span><div>HTTPS通信需要证书，一般需要向证书颁发机构（CA）购买</div></div>
+</div>
+<h5 id="https的连接过程">Https的连接过程？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<figure class="source-figure"><img src="_v_images/image-20221212012139142.png" alt="image-20221212012139142"><figcaption>image-20221212012139142</figcaption></figure>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">1.</span><div>客户端向服务器发送请求，同时发送客户端支持的一套加密规则（包括对称加密、非对称加密、摘要算法）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">2.</span><div>服务器从中选出一组加密算法与HASH算法，并将自己的身份信息以证书的形式发回给浏览器。证书里面包含了网站地址，<strong>加密公钥</strong>（用于非对称加密），以及证书的颁发机构等信息（证书中的私钥只能用于服务器端进行解密）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">3.</span><div>客户端验证服务器的合法性，包括：证书是否过期，CA 是否可靠，发行者证书的公钥能否正确解开服务器证书的“发行者的数字签名”，服务器证书上的域名是否和服务器的实际域名相匹配；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">4.</span><div>如果证书受信任，或者用户接收了不受信任的证书，浏览器会生成一个<strong>随机密钥</strong>（用于对称算法），并用服务器提供的公钥加密（采用非对称算法对密钥加密）；使用Hash算法对握手消息进行<strong>摘要</strong>计算，并对摘要使用之前产生的密钥加密（对称算法）；将加密后的随机密钥和摘要一起发送给服务器；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">5.</span><div>服务器使用自己的私钥解密，得到对称加密的密钥，用这个密钥解密出Hash摘要值，并验证握手消息是否一致；如果一致，服务器使用对称加密的密钥加密握手消息发给浏览器；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">6.</span><div>浏览器解密并验证摘要，若一致，则握手结束。之后的数据传送都使用对称加密的密钥进行加密</div></div>
+</div>
+<p>总结：非对称加密算法用于在握手过程中加密生成的密码；对称加密算法用于对真正传输的数据进行加密；HASH算法用于验证数据的完整性。</p>
+</details>
+<h5 id="输入-www-baidu-com-怎么变成-https-www-baidu-com-的-怎么确定用http还是https">输入 www.baidu.com，怎么变成 https://www.baidu.com 的，怎么确定用HTTP还是HTTPS？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p><a href="https://www.sohu.com/a/136637876_487516" target="_blank" rel="noreferrer">你访问的网站是如何自动切换到 HTTPS 的？</a></p>
+<p>一种是原始的302跳转，服务器把所有的HTTp流量跳转到HTTPS。但这样有一个漏洞，就是中间人可能在第一次访问站点的时候就劫持。 解决方法是引入HSTS机制，用户浏览器在访问站点的时候强制使用HTTPS。</p>
+</details>
+<h5 id="https连接的时候-怎么确定收到的包是服务器发来的-中间人攻击">HTTPS连接的时候，怎么确定收到的包是服务器发来的（中间人攻击）？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<p>1.验证域名、有效期等信息是否正确。证书上都有包含这些信息，比较容易完成验证；</p>
+<p>2.判断证书来源是否合法。每份签发证书都可以根据验证链查找到对应的根证书，操作系统、浏览器会在本地存储权威机构的根证书，利用本地根证书可以对对应机构签发证书完成来源验证；</p>
+<p>3.判断证书是否被篡改。需要与 CA 服务器进行校验；</p>
+<p>4.判断证书是否已吊销。通过CRL（Certificate Revocation List 证书注销列表）和 OCSP（Online Certificate Status Protocol 在线证书状态协议）实现，其中 OCSP 可用于第3步中以减少与 CA 服务器的交互，提高验证效率</p>
+</details>
+<h5 id="什么是对称加密-非对称加密-区别是什么">什么是对称加密、非对称加密？区别是什么？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>对称加密：加密和解密采用相同的密钥。如：DES、RC2、RC4</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>非对称加密：需要两个密钥：公钥和私钥。如果用公钥加密，需要用私钥才能解密。如：RSA</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>区别：对称加密速度更快，通常用于大量数据的加密；非对称加密安全性更高（不需要传送私钥）</div></div>
+</div>
+</details>
+<h5 id="数字签名-报文摘要的原理">数字签名、报文摘要的原理</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>发送者A用私钥进行签名，接收者B用公钥验证签名。因为除A外没有人有私钥，所以B相信签名是来自A。A不可抵赖，B也不能伪造报文。</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>摘要算法:MD5、SHA</div></div>
+</div>
+</details>
+<h3 id="get与post的区别">GET与POST的区别？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">1.</span><div>GET是幂等的，即读取同一个资源，总是得到相同的数据，POST不是幂等的；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">2.</span><div>GET一般用于从服务器获取资源，而POST有可能改变服务器上的资源；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">3.</span><div>请求形式上：GET请求的数据附在URL之后，在HTTP请求头中；POST请求的数据在请求体中；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">4.</span><div>安全性：GET请求可被缓存、收藏、保留到历史记录，且其请求数据明文出现在URL中。POST的参数不会被保存，安全性相对较高；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">5.</span><div>GET只允许ASCII字符，POST对数据类型没有要求，也允许二进制数据；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">6.</span><div>GET的长度有限制（操作系统或者浏览器），而POST数据大小无限制</div></div>
+</div>
+<h3 id="session与cookie的区别">Session与Cookie的区别？</h3>
+<p>Session是服务器端保持状态的方案，Cookie是客户端保持状态的方案</p>
+<p>Cookie保存在客户端本地，客户端请求服务器时会将Cookie一起提交；Session保存在服务端，通过检索Sessionid查看状态。保存Sessionid的方式可以采用Cookie，如果禁用了Cookie，可以使用URL重写机制（把会话ID保存在URL中）。</p>
+<h3 id="从输入网址到获得页面的过程-越详细越好">从输入网址到获得页面的过程 (越详细越好)？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">1.</span><div>浏览器查询 DNS，获取域名对应的IP地址:具体过程包括浏览器搜索自身的DNS缓存、搜索操作系统的DNS缓存、读取本地的Host文件和向本地DNS服务器进行查询等。对于向本地DNS服务器进行查询，如果要查询的域名包含在本地配置区域资源中，则返回解析结果给客户机，完成域名解析(此解析具有权威性)；如果要查询的域名不由本地DNS服务器区域解析，但该服务器已缓存了此网址映射关系，则调用这个IP地址映射，完成域名解析（此解析不具有权威性）。如果本地域名服务器并未缓存该网址映射关系，那么将根据其设置发起递归查询或者迭代查询；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">2.</span><div>浏览器获得域名对应的IP地址以后，浏览器向服务器请求建立链接，发起三次握手；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">3.</span><div>TCP/IP链接建立起来后，浏览器向服务器发送HTTP请求；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">4.</span><div>服务器接收到这个请求，并根据路径参数映射到特定的请求处理器进行处理，并将处理结果及相应的视图返回给浏览器；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">5.</span><div>浏览器解析并渲染视图，若遇到对js文件、css文件及图片等静态资源的引用，则重复上述步骤并向服务器请求这些资源；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">6.</span><div>浏览器根据其请求到的资源、数据渲染页面，最终向用户呈现一个完整的页面。</div></div>
+</div>
+<h3 id="http请求有哪些常见状态码">HTTP请求有哪些常见状态码？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">1.</span><div>2xx状态码：操作成功。200 OK</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">2.</span><div>3xx状态码：重定向。301 永久重定向；302暂时重定向</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">3.</span><div>4xx状态码：客户端错误。400 Bad Request；401 Unauthorized；403 Forbidden；404 Not Found；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">4.</span><div>5xx状态码：服务端错误。500服务器内部错误；501服务不可用</div></div>
+</div>
+<h3 id="什么是rip-routing-information-protocol-距离矢量路由协议-算法是什么">什么是RIP (Routing Information Protocol, 距离矢量路由协议)? 算法是什么？</h3>
+<p>每个路由器维护一张表，记录该路由器到其它网络的”跳数“，路由器到与其直接连接的网络的跳数是1，每多经过一个路由器跳数就加1；更新该表时和相邻路由器交换路由信息；路由器允许一个路径最多包含15个路由器，如果跳数为16，则不可达。交付数据报时优先选取距离最短的路径。</p>
+<p>（PS：RIP是应用层协议：<a href="https://www.zhihu.com/question/19645407" target="_blank" rel="noreferrer">https://www.zhihu.com/question/19645407</a>）</p>
+<details class="source-detail">
+<summary>优缺点</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>实现简单，开销小</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>随着网络规模扩大开销也会增大；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>最大距离为15，限制了网络的规模；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>当网络出现故障时，要经过较长的时间才能将此信息传递到所有路由器</div></div>
+</div>
+</details>
+<h3 id="计算机网络体系结构">计算机网络体系结构</h3>
+<figure class="source-figure"><img src="_v_images/20191129195451183_16713.png" alt="计算机网络体系结构"><figcaption>计算机网络体系结构</figcaption></figure>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>Physical, Data Link, Network, Transport, Application</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>应用层：常见协议：</div></div>
+<div class="md-list-row depth-2"><span class="md-marker">-</span><div>FTP(21端口)：文件传输协议</div></div>
+<div class="md-list-row depth-2"><span class="md-marker">-</span><div>SSH(22端口)：远程登陆</div></div>
+<div class="md-list-row depth-2"><span class="md-marker">-</span><div>TELNET(23端口)：远程登录</div></div>
+<div class="md-list-row depth-2"><span class="md-marker">-</span><div>SMTP(25端口)：发送邮件</div></div>
+<div class="md-list-row depth-2"><span class="md-marker">-</span><div>POP3(110端口)：接收邮件</div></div>
+<div class="md-list-row depth-2"><span class="md-marker">-</span><div>HTTP(80端口)：超文本传输协议</div></div>
+<div class="md-list-row depth-2"><span class="md-marker">-</span><div>DNS(53端口)：运行在UDP上，域名解析服务</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>传输层：TCP/UDP</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>网络层：IP、ARP、NAT、RIP...</div></div>
+</div>
+<details class="source-detail">
+<summary>路由器、交换机位于哪一层？</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>路由器网络层，根据IP地址进行寻址；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>交换机数据链路层，根据MAC地址进行寻址</div></div>
+</div>
+</details>
+<h3 id="ip地址的分类">IP地址的分类？</h3>
+<figure class="source-figure"><img src="_v_images/20191201085151639_2895.png" alt="IP address"><figcaption>IP address</figcaption></figure>
+<p>路由器仅根据网络号net-id来转发分组，当分组到达目的网络的路由器之后，再按照主机号host-id将分组交付给主机；同一网络上的所有主机的网络号相同。</p>
+<h3 id="什么叫划分子网">什么叫划分子网？</h3>
+<p>从主机号host-id借用若干个比特作为子网号subnet-id；子网掩码：网络号和子网号都为1，主机号为0；数据报仍然先按照网络号找到目的网络，发送到路由器，路由器再按照网络号和子网号找到目的子网：将子网掩码与目标地址逐比特与操作，若结果为某个子网的网络地址，则送到该子网。</p>
+<h3 id="什么是arp协议-address-resolution-protocol">什么是ARP协议 (Address Resolution Protocol)？</h3>
+<p><strong>ARP协议完成了IP地址与物理地址的映射</strong>。每一个主机都设有一个 ARP 高速缓存，里面有<strong>所在的局域网</strong>上的各主机和路由器的 IP 地址到硬件地址的映射表。当源主机要发送数据包到目的主机时，会先检查自己的ARP高速缓存中有没有目的主机的MAC地址，如果有，就直接将数据包发到这个MAC地址，如果没有，就向<strong>所在的局域网</strong>发起一个ARP请求的广播包（在发送自己的 ARP 请求时，同时会带上自己的 IP 地址到硬件地址的映射），收到请求的主机检查自己的IP地址和目的主机的IP地址是否一致，如果一致，则先保存源主机的映射到自己的ARP缓存，然后给源主机发送一个ARP响应数据包。源主机收到响应数据包之后，先添加目的主机的IP地址与MAC地址的映射，再进行数据传送。如果源主机一直没有收到响应，表示ARP查询失败。</p>
+<p>如果所要找的主机和源主机不在同一个局域网上，那么就要通过 ARP 找到一个位于本局域网上的某个路由器的硬件地址，然后把分组发送给这个路由器，让这个路由器把分组转发给下一个网络。剩下的工作就由下一个网络来做。</p>
+<h3 id="什么是nat-network-address-translation-网络地址转换">什么是NAT (Network Address Translation, 网络地址转换)？</h3>
+<p>用于解决内网中的主机要和因特网上的主机通信。由NAT路由器将主机的本地IP地址转换为全球IP地址，分为静态转换（转换得到的全球IP地址固定不变）和动态NAT转换。</p>
+<h2 id="http各版本">HTTP各版本</h2>
+<figure class="source-figure"><img src="_v_images/202205281423439.png" alt="image-20220528142308368"><figcaption>image-20220528142308368</figcaption></figure>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>HTTP 0.9版本</div></div>
+</div>
+<div class="md-list">
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>HTTP协议的第一个版本，功能简单，<strong>已弃用</strong></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>仅支持纯文本数据的传输，虽然支持HTML，但是不支持图片插入</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>仅支持GET请求方式，且不支持请求头</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>无状态，短连接。没有对用户状态的管理；每次请求建立一个TCP连接，响应之后关闭TCP连接。</div></div>
+</div>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>HTTP 1.0版本</div></div>
+</div>
+<div class="md-list">
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>支持POST、GET、HEAD三种方法</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div><strong>支持长连接keep-alive</strong>（但<strong>默认还是使用短连接</strong>：浏览器每一次请求建立一次TCP连接，请求处理完毕之后断开）。</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>服务器不跟踪用户的行为也不记录用户过往请求。</div></div>
+</div>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>HTTP 1.1版本</div></div>
+</div>
+<div class="md-list">
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>新增PUT、DELETE、CONNECT、TRACE、OPTIONS方法，是现今<strong>使用最多</strong>的版本。</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>支持长连接，在一次TCP连接中可以发送多个请求或响应，且默认使用长连接。</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>支持宽带优化、断点续传。请求的对象部分数据，可以不必发送整个对象；文件上传下载支持续传。</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>因为长连接产生的问题：队头阻塞。长连接中，发送请求和响应都是串行化的，前面的消息会造成后面的消息也阻塞。解决方法是创建多个TCP连接，这样就可以基本保证了可用性，浏览器<strong>默认的最大TCP连接数是6个</strong>。</div></div>
+</div>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>HTTP 2.0版本</div></div>
+</div>
+<div class="md-list">
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>二进制分帧，所有帧都是用二进制编码，节省了空间</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>多路复用：HTTP 2.0中所有的连接都是持久化的。相比1.1版本可以不用维护更多的TCP连接，在处理并发请求的时候，可以将多个数据流中<strong>互不依赖的帧</strong>可以<strong>乱序发送</strong>，同时还支持<strong>优先级</strong>。接收方接收之后可以根据帧头部信息将帧组合起来。（解决了1.1版本中的队头阻塞问题）</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>头部压缩：1.1版本每次传输都需要传输一份首部，2.0让双方各自缓存一份首部字段表，达到更快传输的目标。</div></div>
+</div>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>HTTP 3.0版本</div></div>
+</div>
+<div class="md-list">
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>基于UDP的<strong>QUIC多路复用</strong>：在一个QUIC中可以并发发送多个HTTP请求Stream，且如果各个Stream互不依赖，那么就不会造成<strong>使用TCP带来的队头阻塞问题</strong>。这个问题源头上是因为TCP连接，TCP连接的性质决定了重传会影响队后的数据发送，所以干脆选用UDP来解决这个方案。</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>0RTT建链：RTT表示Round-Trip Time，3.0可以实现0RTT建链。一般来说HTTPS协议要建立完整链接包括<strong>TCP握手</strong>和<strong>TLS握手</strong>，总计需要至少2-3个RTT，普通的HTTP协议也需要至少1个RTT才可以完成握手。基于UDP的QUIC协议可以在第一次发送包的时候直接发送业务数据。但是由于首次连接需要发送公钥数据，所以首次连接并不使用这一方法。</div></div>
+</div>
+<figure class="source-figure"><img src="_v_images/202205281424550.gif" alt="image-202205281424550.gif"><figcaption>image-202205281424550.gif</figcaption></figure>
+<p>  &gt; 参考文档：[图解 | 为什么HTTP3.0要弃用TCP协议，而改用UDP协议？_涛哥聊Python-CSDN博客](</p>
+<h3 id="参考">参考</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://blog.csdn.net/justloveyou_/article/details/78303617" target="_blank" rel="noreferrer">面试/笔试第一弹 —— 计算机网络面试问题集锦</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://blog.csdn.net/qq_43103529/article/details/120813469" target="_blank" rel="noreferrer">【面试】计算机网络雨下一整晚real的博客-CSDN博客</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://blog.csdn.net/yjxsdzx/article/details/71937886" target="_blank" rel="noreferrer">什么时候选TCP、UDP？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://blog.csdn.net/bad_sheep/article/details/6158676" target="_blank" rel="noreferrer">TCP速率与窗口，带宽，RTT之间的关系</a></div></div>
+</div></div>
+    </section>
+
+    <section id="review-plan" class="section" data-search-section>
+      <h2>3 / 5 / 7 天复习计划</h2>
+      <ul class="knowledge-list">
+        <li class="knowledge-card">
+          <b class="knowledge-title">3 天：先过主干</b>
+          <p>第一遍只看目录、逐章复习卡和 Mermaid 图谱，把每个章节整理成一句话定义与一个典型追问。</p>
+          <p class="knowledge-note">注释：这一轮不要陷入细枝末节，目标是建立完整地图。</p>
+        </li>
+        <li class="knowledge-card">
+          <b class="knowledge-title">5 天：补齐追问</b>
+          <p>第二遍打开原文折叠块，按“机制、边界、故障、指标、命令”补答案，遇到不会的地方回到原文或权威资料。</p>
+          <p class="knowledge-note">注释：能讲清追问，才算从“看过”变成“能答”。</p>
+        </li>
+        <li class="knowledge-card">
+          <b class="knowledge-title">7 天：模拟面试</b>
+          <p>第三遍用页内搜索随机抽题，强迫自己 2 分钟内回答，再对照原文和复习卡补证据链。</p>
+          <p class="knowledge-note">注释：最后一天只修表达，不再大面积新增材料，保证临场稳定。</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>来源与授权</h2>
+      <div class="license-note">
+        <p>本页是基于 <a href="https://github.com/wolverinn/Waking-Up" target="_blank" rel="noreferrer">wolverinn/Waking-Up</a> 的 GPLv3 授权资料生成的本地 HTML 改编版。源文件：<a href="https://github.com/wolverinn/Waking-Up/blob/cf692b5/Computer%20Network.md" target="_blank" rel="noreferrer">Computer Network.md</a>，源提交：<code>cf692b5</code>。</p>
+        <p>输出目录内已复制 <code>LICENSE</code>。如果这些 HTML 被公开分发，应继续保留 GPLv3 授权、原始来源、修改说明与对应源码/生成脚本。</p>
+      </div>
+    </section>
+
+    <div id="noResults" class="no-results">没有找到匹配内容。换一个关键词试试。</div>
+  </main>
+  <script>
+    const searchInput = document.getElementById("search");
+    const noResults = document.getElementById("noResults");
+    const searchable = [...document.querySelectorAll("[data-search-section]")];
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      searchable.forEach((section) => {
+        const haystack = section.textContent.toLowerCase();
+        const match = !query || haystack.includes(query);
+        section.classList.toggle("hidden-by-search", !match);
+        if (match) visible += 1;
+      });
+      noResults.classList.toggle("visible", query && visible === 0);
+    });
+
+    async function loadMermaid() {
+      const urls = [
+        "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js",
+        "https://unpkg.com/mermaid@10/dist/mermaid.min.js"
+      ];
+      for (const url of urls) {
+        try {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = url;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+          if (window.mermaid) return window.mermaid;
+        } catch {}
+      }
+      return null;
+    }
+
+    async function renderMermaid() {
+      const blocks = [...document.querySelectorAll(".mermaid-source")];
+      if (!blocks.length) return;
+      const mermaidLib = await loadMermaid();
+      blocks.forEach((block, index) => {
+        const code = block.textContent;
+        const figure = document.createElement("figure");
+        figure.className = "mermaid-figure";
+        const diagram = document.createElement("div");
+        diagram.className = "mermaid";
+        diagram.id = "mermaid-diagram-" + index;
+        diagram.textContent = code;
+        const raw = document.createElement("details");
+        raw.className = "mermaid-raw";
+        raw.innerHTML = "<summary>查看 Mermaid 源码</summary><pre><code></code></pre>";
+        raw.querySelector("code").textContent = code;
+        figure.appendChild(diagram);
+        figure.appendChild(raw);
+        block.replaceWith(figure);
+      });
+      if (!mermaidLib) {
+        document.querySelectorAll(".mermaid-figure").forEach((figure) => {
+          const error = document.createElement("div");
+          error.className = "mermaid-error";
+          error.textContent = "Mermaid CDN 加载失败，已保留源码。";
+          figure.appendChild(error);
+        });
+        return;
+      }
+      mermaidLib.initialize({
+        startOnLoad: false,
+        securityLevel: "loose",
+        theme: "base",
+        themeVariables: {
+          fontFamily: "Microsoft YaHei, Noto Sans SC, system-ui, sans-serif",
+          fontSize: "15px",
+          primaryColor: "#f6f5f2",
+          primaryTextColor: "#242424",
+          primaryBorderColor: "#d8d5cb",
+          lineColor: "#6f6f6f",
+          secondaryColor: "#f0f5ff",
+          tertiaryColor: "#eef7f5",
+          noteBkgColor: "#fff8e7",
+          noteTextColor: "#242424"
+        },
+        flowchart: {
+          htmlLabels: true,
+          useMaxWidth: false,
+          curve: "basis",
+          nodeSpacing: 42,
+          rankSpacing: 54,
+          padding: 12
+        },
+        sequence: {
+          mirrorActors: false,
+          useMaxWidth: true
+        }
+      });
+      try {
+        await mermaidLib.run({ querySelector: ".mermaid" });
+      } catch (error) {
+        document.querySelectorAll(".mermaid-figure").forEach((figure) => {
+          if (figure.querySelector("svg")) return;
+          const box = document.createElement("div");
+          box.className = "mermaid-error";
+          box.textContent = "Mermaid 渲染失败：" + (error && error.message ? error.message : String(error));
+          figure.appendChild(box);
+        });
+      }
+    }
+    renderMermaid();
+  </script>
+</body>
+</html>

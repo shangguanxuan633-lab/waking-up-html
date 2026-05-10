@@ -1,0 +1,1320 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>数据库面试复习</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --paper: #ffffff;
+      --book: #fbfaf7;
+      --ink: #242424;
+      --muted: #686868;
+      --line: #e5e3dc;
+      --line-strong: #d8d5cb;
+      --blue: #315fbc;
+      --teal: #0f766e;
+      --amber: #9a6700;
+      --soft-blue: #f0f5ff;
+      --soft-teal: #ecfdf5;
+      --soft-amber: #fff8e7;
+      --soft-rose: #fff1f2;
+      --shadow: 0 10px 28px rgba(36, 36, 36, .06);
+      --book-shadow: 0 22px 70px rgba(36, 36, 36, .08);
+      --accent: var(--blue);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.74;
+      letter-spacing: 0;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 250, 247, .94);
+      backdrop-filter: blur(12px);
+    }
+    .topbar-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 10px 18px;
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(220px, 420px);
+      gap: 14px;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--soft-blue);
+      border: 1px solid var(--line-strong);
+      color: var(--blue);
+      flex: none;
+      font-size: 14px;
+    }
+    .brand span:last-child {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .searchbox {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+    }
+    .searchbox:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(49, 95, 188, .12);
+    }
+    .layout {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 18px 52px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+    .hero {
+      min-height: 360px;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(240, 245, 255, .86), rgba(236, 253, 245, .54) 48%, rgba(255, 248, 231, .82)),
+        var(--book);
+      box-shadow: var(--book-shadow);
+      display: grid;
+      gap: 22px;
+      align-content: end;
+    }
+    .eyebrow {
+      margin: 0;
+      color: var(--accent);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      max-width: 980px;
+    }
+    .hero-copy {
+      max-width: 980px;
+      margin: 0;
+      font-size: 18px;
+      color: #3e3e3e;
+    }
+    .meta-grid,
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .meta-item,
+    .stat-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .74);
+      padding: 12px;
+      min-width: 0;
+    }
+    .meta-item b,
+    .stat-item b {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .meta-item span,
+    .stat-item span {
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    .section > p {
+      margin: 8px 0 14px;
+      color: #424242;
+    }
+    .toc-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .toc-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--book);
+      color: var(--ink);
+      font-size: 14px;
+      max-width: 100%;
+    }
+    .toc-pill:hover,
+    .toc-pill.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .level-3 { background: #fff; }
+    .knowledge-list,
+    .diagram-grid,
+    .qa-grid,
+    .case-grid,
+    .code-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .knowledge-card,
+    .diagram-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--book);
+      padding: 16px;
+      min-width: 0;
+    }
+    .compact-card { background: #fff; }
+    .knowledge-title {
+      display: block;
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.42;
+      margin-bottom: 8px;
+    }
+    .knowledge-card p {
+      margin: 8px 0 0;
+      color: #3f3f3f;
+    }
+    .knowledge-note {
+      border-left: 3px solid var(--accent);
+      padding-left: 10px;
+      color: #555;
+      background: rgba(255, 255, 255, .58);
+    }
+    .diagram-card h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+    .diagram-caption {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .mermaid-figure {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow-x: auto;
+    }
+    .mermaid {
+      min-width: 620px;
+    }
+    .mermaid svg {
+      max-width: none;
+      height: auto;
+    }
+    .mermaid-raw {
+      margin-top: 10px;
+    }
+    .mermaid-raw summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .mermaid-error {
+      margin-top: 10px;
+      border: 1px solid #fecdd3;
+      border-radius: 8px;
+      background: var(--soft-rose);
+      color: #9f1239;
+      padding: 10px;
+    }
+    .source-material {
+      background: var(--paper);
+    }
+    .source-body {
+      max-width: 1060px;
+    }
+    .source-body h1,
+    .source-body h2,
+    .source-body h3,
+    .source-body h4 {
+      scroll-margin-top: 82px;
+      letter-spacing: 0;
+    }
+    .source-body h1 {
+      font-size: 34px;
+      margin: 4px 0 18px;
+    }
+    .source-body h2 {
+      font-size: 27px;
+      margin: 30px 0 12px;
+    }
+    .source-body h3 {
+      font-size: 22px;
+      margin: 28px 0 10px;
+      padding-top: 6px;
+      border-top: 1px solid var(--line);
+    }
+    .source-body h4,
+    .source-body h5,
+    .source-body h6 {
+      font-size: 18px;
+      margin: 22px 0 8px;
+    }
+    .source-body p {
+      margin: 10px 0;
+    }
+    .md-list {
+      display: grid;
+      gap: 6px;
+      margin: 10px 0 14px;
+    }
+    .md-list-row {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr);
+      gap: 7px;
+      align-items: start;
+    }
+    .md-list-row.depth-1 { padding-left: 20px; }
+    .md-list-row.depth-2 { padding-left: 40px; }
+    .md-list-row.depth-3 { padding-left: 60px; }
+    .md-list-row.depth-4 { padding-left: 80px; }
+    .md-list-row.depth-5 { padding-left: 100px; }
+    .md-marker {
+      color: var(--accent);
+      font-weight: 800;
+      text-align: right;
+    }
+    code {
+      font-family: Consolas, "Cascadia Code", "SFMono-Regular", monospace;
+      background: #f3f1ea;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 1px 5px;
+      font-size: .92em;
+    }
+    .code-block,
+    .mermaid-source,
+    .mermaid-raw pre {
+      margin: 12px 0;
+      padding: 14px;
+      overflow-x: auto;
+      background: #1f2937;
+      color: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #111827;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+    .code-block code,
+    .mermaid-source code,
+    .mermaid-raw code {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      color: inherit;
+    }
+    blockquote {
+      margin: 12px 0;
+      padding: 10px 14px;
+      border-left: 4px solid var(--accent);
+      background: var(--soft-amber);
+      color: #4b4638;
+    }
+    .source-detail {
+      margin: 12px 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+    }
+    .source-detail summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-weight: 800;
+    }
+    .source-figure,
+    .source-html-center {
+      margin: 16px 0;
+      text-align: center;
+    }
+    .avatar-figure {
+      display: inline-block;
+      margin: 6px;
+      vertical-align: middle;
+    }
+    .avatar-figure img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+    .source-figure img,
+    .inline-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .source-figure figcaption {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .source-link-wrap {
+      display: inline-block;
+      max-width: 100%;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+      min-width: 110px;
+    }
+    th {
+      background: var(--soft-blue);
+      text-align: left;
+    }
+    .license-note {
+      border: 1px solid var(--line-strong);
+      background: var(--soft-amber);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .hidden-by-search { display: none !important; }
+    .no-results {
+      display: none;
+      border: 1px solid #fecdd3;
+      background: var(--soft-rose);
+      color: #9f1239;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .no-results.visible { display: block; }
+    @media (max-width: 720px) {
+      .topbar-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .layout {
+        padding: 18px 12px 36px;
+      }
+      .hero,
+      .section {
+        padding: 18px;
+      }
+      h1 {
+        font-size: 34px;
+      }
+      .hero-copy {
+        font-size: 16px;
+      }
+      .md-list-row.depth-3,
+      .md-list-row.depth-4,
+      .md-list-row.depth-5 {
+        padding-left: 24px;
+      }
+      .mermaid {
+        min-width: 520px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="返回总览">
+        <span class="brand-mark">WU</span>
+        <span>数据库面试复习</span>
+      </a>
+      <input id="search" class="searchbox" type="search" placeholder="搜索本页知识点、追问、命令或章节">
+    </div>
+  </header>
+  <main class="layout">
+    <section class="hero" data-search-section>
+      <div>
+        <p class="eyebrow">Waking-Up HTML · GPLv3 Derived Review</p>
+        <h1>数据库面试复习</h1>
+      </div>
+      <p class="hero-copy">围绕事务、隔离级别、锁、MVCC、索引、存储引擎、优化与复制展开。</p>
+      <div class="meta-grid">
+        <div class="meta-item"><b>源文件</b><span>Database.md</span></div>
+        <div class="meta-item"><b>源提交</b><span>cf692b5</span></div>
+        <div class="meta-item"><b>生成时间</b><span>2026/05/10 20:09:57 Asia/Shanghai</span></div>
+        <div class="meta-item"><b>授权</b><span>GPLv3，保留原作者与来源</span></div>
+      </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>资料入口</h2>
+      <div class="toc-row"><a class="toc-pill" href="index.html">总览</a><a class="toc-pill" href="computer-network.html">计算机网络</a><a class="toc-pill" href="operating-systems.html">操作系统</a><a class="toc-pill active" href="database.html">数据库</a><a class="toc-pill" href="design-pattern.html">设计模式</a><a class="toc-pill" href="git-commandline-rest.html">Git/REST/命令行</a><a class="toc-pill" href="python-handbook.html">Python</a></div>
+      <p>相关页：<a href="index.html">总览</a><a href="computer-network.html">计算机网络</a><a href="operating-systems.html">操作系统</a><a href="design-pattern.html">设计模式</a><a href="git-commandline-rest.html">Git/REST/命令行</a><a href="python-handbook.html">Python</a></p>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>本页统计</h2>
+      <div class="stat-grid">
+        <div class="stat-item"><b>原文行数</b><span>440</span></div>
+        <div class="stat-item"><b>标题节点</b><span>30</span></div>
+        <div class="stat-item"><b>折叠追问</b><span>15</span></div>
+        <div class="stat-item"><b>图片</b><span>1</span></div>
+        <div class="stat-item"><b>代码块</b><span>6</span></div>
+        <div class="stat-item"><b>列表行</b><span>186</span></div>
+      </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>页内目录</h2>
+      <div class="toc-row">
+        <a class="toc-pill" href="#review-cards">逐章复习卡</a>
+        <a class="toc-pill" href="#visual-atlas">Mermaid 图谱</a>
+        <a class="toc-pill" href="#source-material">原文资料转写</a>
+        <a class="toc-pill" href="#review-plan">复习计划</a>
+        <a class="toc-pill level-1" href="#数据库">数据库</a><a class="toc-pill level-3" href="#事务的概念和特性">事务的概念和特性？</a><a class="toc-pill level-3" href="#会出现哪些并发一致性问题">会出现哪些并发一致性问题？</a><a class="toc-pill level-3" href="#数据库的四种隔离级别">数据库的四种隔离级别？</a><a class="toc-pill level-3" href="#什么是乐观锁和悲观锁">什么是乐观锁和悲观锁？</a><a class="toc-pill level-3" href="#常见的封锁类型">常见的封锁类型？</a><a class="toc-pill level-3" href="#什么是三级封锁协议">什么是三级封锁协议？</a><a class="toc-pill level-3" href="#四种隔离级别的实现原理">四种隔离级别的实现原理？</a><a class="toc-pill level-3" href="#什么是两段锁协议">什么是两段锁协议？</a><a class="toc-pill level-3" href="#什么是-mvcc">什么是 MVCC？</a><a class="toc-pill level-3" href="#数据库的范式">数据库的范式？</a><a class="toc-pill level-3" href="#列举几种表连接方式">列举几种表连接方式？</a><a class="toc-pill level-3" href="#什么是存储过程-有哪些优缺点">什么是存储过程？有哪些优缺点？</a><a class="toc-pill level-3" href="#drop-delete-truncate的区别">Drop/Delete/Truncate的区别？</a><a class="toc-pill level-3" href="#什么是视图-什么是游标">什么是视图？什么是游标？</a><a class="toc-pill level-3" href="#数据库索引的实现原理-b-树">数据库索引的实现原理（B+树）</a><a class="toc-pill level-3" href="#使用索引的优点">使用索引的优点</a><a class="toc-pill level-3" href="#哪些情况下索引会失效">哪些情况下索引会失效？</a><a class="toc-pill level-3" href="#在哪些地方适合创建索引">在哪些地方适合创建索引？</a><a class="toc-pill level-3" href="#索引的分类">索引的分类？</a><a class="toc-pill level-3" href="#mysql的两种存储引擎-innodb-和-myisam-的区别">MySQL的两种存储引擎 InnoDB 和 MyISAM 的区别？</a><a class="toc-pill level-3" href="#如何优化数据库">如何优化数据库？</a><a class="toc-pill level-3" href="#什么是主从复制-实现原理是什么">什么是主从复制？实现原理是什么？</a><a class="toc-pill level-3" href="#关系型数据库和非关系型数据库的区别">关系型数据库和非关系型数据库的区别？</a><a class="toc-pill level-3" href="#参考">参考</a><a class="toc-pill level-3" href="#待完成">待完成</a>
+      </div>
+    </section>
+
+    
+
+    <section class="section" data-search-section>
+      <h2>能力地图</h2>
+      <ul class="knowledge-list">
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P4/P5</b>
+      <p>能准确复述概念、常见流程、基本优缺点，回答不混淆术语。</p>
+      <p class="knowledge-note">注释：复习 数据库 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P6</b>
+      <p>能把概念和机制连起来，说明常见失败场景、复杂度、边界条件。</p>
+      <p class="knowledge-note">注释：复习 数据库 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P7</b>
+      <p>能结合生产指标、命令、日志、容量和取舍，主动补充排障证据。</p>
+      <p class="knowledge-note">注释：复习 数据库 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P8/P9</b>
+      <p>能从系统设计、平台治理、风险控制和团队规范层面讲清可落地方案。</p>
+      <p class="knowledge-note">注释：复习 数据库 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  </ul>
+    </section>
+
+    <section id="review-cards" class="section" data-search-section>
+      <h2>逐章复习卡</h2>
+      <p>下面按原文标题一对一生成复习卡，不替代原文，而是帮你把每个章节转成面试表达路径。</p>
+      <ul class="knowledge-list">
+    <li class="knowledge-card" data-search="事务的概念和特性？ database">
+      <b class="knowledge-title">1. 事务的概念和特性？</b>
+      <p>原文对应章节：<a href="#事务的概念和特性">事务的概念和特性？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="会出现哪些并发一致性问题？ database">
+      <b class="knowledge-title">2. 会出现哪些并发一致性问题？</b>
+      <p>原文对应章节：<a href="#会出现哪些并发一致性问题">会出现哪些并发一致性问题？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="数据库的四种隔离级别？ database">
+      <b class="knowledge-title">3. 数据库的四种隔离级别？</b>
+      <p>原文对应章节：<a href="#数据库的四种隔离级别">数据库的四种隔离级别？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是乐观锁和悲观锁？ database">
+      <b class="knowledge-title">4. 什么是乐观锁和悲观锁？</b>
+      <p>原文对应章节：<a href="#什么是乐观锁和悲观锁">什么是乐观锁和悲观锁？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="常见的封锁类型？ database">
+      <b class="knowledge-title">5. 常见的封锁类型？</b>
+      <p>原文对应章节：<a href="#常见的封锁类型">常见的封锁类型？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是三级封锁协议？ database">
+      <b class="knowledge-title">6. 什么是三级封锁协议？</b>
+      <p>原文对应章节：<a href="#什么是三级封锁协议">什么是三级封锁协议？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="四种隔离级别的实现原理？ database">
+      <b class="knowledge-title">7. 四种隔离级别的实现原理？</b>
+      <p>原文对应章节：<a href="#四种隔离级别的实现原理">四种隔离级别的实现原理？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是两段锁协议？ database">
+      <b class="knowledge-title">8. 什么是两段锁协议？</b>
+      <p>原文对应章节：<a href="#什么是两段锁协议">什么是两段锁协议？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是 MVCC？ database">
+      <b class="knowledge-title">9. 什么是 MVCC？</b>
+      <p>原文对应章节：<a href="#什么是-mvcc">什么是 MVCC？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="数据库的范式？ database">
+      <b class="knowledge-title">10. 数据库的范式？</b>
+      <p>原文对应章节：<a href="#数据库的范式">数据库的范式？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="列举几种表连接方式？ database">
+      <b class="knowledge-title">11. 列举几种表连接方式？</b>
+      <p>原文对应章节：<a href="#列举几种表连接方式">列举几种表连接方式？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是存储过程？有哪些优缺点？ database">
+      <b class="knowledge-title">12. 什么是存储过程？有哪些优缺点？</b>
+      <p>原文对应章节：<a href="#什么是存储过程-有哪些优缺点">什么是存储过程？有哪些优缺点？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="Drop/Delete/Truncate的区别？ database">
+      <b class="knowledge-title">13. Drop/Delete/Truncate的区别？</b>
+      <p>原文对应章节：<a href="#drop-delete-truncate的区别">Drop/Delete/Truncate的区别？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是视图？什么是游标？ database">
+      <b class="knowledge-title">14. 什么是视图？什么是游标？</b>
+      <p>原文对应章节：<a href="#什么是视图-什么是游标">什么是视图？什么是游标？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="数据库索引的实现原理（B+树） database">
+      <b class="knowledge-title">15. 数据库索引的实现原理（B+树）</b>
+      <p>原文对应章节：<a href="#数据库索引的实现原理-b-树">数据库索引的实现原理（B+树）</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="使用索引的优点 database">
+      <b class="knowledge-title">16. 使用索引的优点</b>
+      <p>原文对应章节：<a href="#使用索引的优点">使用索引的优点</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="哪些情况下索引会失效？ database">
+      <b class="knowledge-title">17. 哪些情况下索引会失效？</b>
+      <p>原文对应章节：<a href="#哪些情况下索引会失效">哪些情况下索引会失效？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="在哪些地方适合创建索引？ database">
+      <b class="knowledge-title">18. 在哪些地方适合创建索引？</b>
+      <p>原文对应章节：<a href="#在哪些地方适合创建索引">在哪些地方适合创建索引？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="索引的分类？ database">
+      <b class="knowledge-title">19. 索引的分类？</b>
+      <p>原文对应章节：<a href="#索引的分类">索引的分类？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="MySQL的两种存储引擎 InnoDB 和 MyISAM 的区别？ database">
+      <b class="knowledge-title">20. MySQL的两种存储引擎 InnoDB 和 MyISAM 的区别？</b>
+      <p>原文对应章节：<a href="#mysql的两种存储引擎-innodb-和-myisam-的区别">MySQL的两种存储引擎 InnoDB 和 MyISAM 的区别？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="如何优化数据库？ database">
+      <b class="knowledge-title">21. 如何优化数据库？</b>
+      <p>原文对应章节：<a href="#如何优化数据库">如何优化数据库？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是主从复制？实现原理是什么？ database">
+      <b class="knowledge-title">22. 什么是主从复制？实现原理是什么？</b>
+      <p>原文对应章节：<a href="#什么是主从复制-实现原理是什么">什么是主从复制？实现原理是什么？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：数据库题要把一致性、并发、索引访问路径、执行计划、锁等待和主从延迟连起来说，最好带 EXPLAIN 或监控指标。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="关系型数据库和非关系型数据库的区别？ database">
+      <b class="knowledge-title">23. 关系型数据库和非关系型数据库的区别？</b>
+      <p>原文对应章节：<a href="#关系型数据库和非关系型数据库的区别">关系型数据库和非关系型数据库的区别？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="参考 database">
+      <b class="knowledge-title">24. 参考</b>
+      <p>原文对应章节：<a href="#参考">参考</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="待完成 database">
+      <b class="knowledge-title">25. 待完成</b>
+      <p>原文对应章节：<a href="#待完成">待完成</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  </ul>
+    </section>
+
+    <section id="visual-atlas" class="section" data-search-section>
+      <h2>Mermaid 图谱</h2>
+      <div class="diagram-grid">
+    <article class="diagram-card" data-search="数据库 章节路线 从原始 Markdown 标题提取，保留一对一章节顺序。 roadmap database">
+      <h3>数据库 章节路线</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+  n1[&quot;1. 事务的概念和特性？&quot;]
+  n2[&quot;2. 会出现哪些并发一致性问题？&quot;]
+  n1 --&gt; n2
+  n3[&quot;3. 数据库的四种隔离级别？&quot;]
+  n2 --&gt; n3
+  n4[&quot;4. 什么是乐观锁和悲观锁？&quot;]
+  n3 --&gt; n4
+  n5[&quot;5. 常见的封锁类型？&quot;]
+  n4 --&gt; n5
+  n6[&quot;6. 什么是三级封锁协议？&quot;]
+  n5 --&gt; n6
+  n7[&quot;7. 四种隔离级别的实现原理？&quot;]
+  n6 --&gt; n7
+  n8[&quot;8. 什么是两段锁协议？&quot;]
+  n7 --&gt; n8
+  n9[&quot;9. 什么是 MVCC？&quot;]
+  n8 --&gt; n9
+  n10[&quot;10. 数据库的范式？&quot;]
+  n9 --&gt; n10
+  n11[&quot;11. 列举几种表连接方式？&quot;]
+  n10 --&gt; n11
+  n12[&quot;12. 什么是存储过程？有哪些优缺点？&quot;]
+  n11 --&gt; n12</code></pre>
+      <p class="diagram-caption">从原始 Markdown 标题提取，保留一对一章节顺序。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="面试回答闭环 每个知识点都按这个闭环复习，能从背诵切到工程表达。 answer interview">
+      <h3>面试回答闭环</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+      A[&quot;一句话定义&quot;] --&gt; B[&quot;为什么存在&quot;]
+      B --&gt; C[&quot;核心机制&quot;]
+      C --&gt; D[&quot;生产场景&quot;]
+      D --&gt; E[&quot;指标/命令/证据&quot;]
+      E --&gt; F[&quot;取舍与边界&quot;]
+      F --&gt; G[&quot;高频追问&quot;]</code></pre>
+      <p class="diagram-caption">每个知识点都按这个闭环复习，能从背诵切到工程表达。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="事务与并发控制 数据库面试的主线是并发一致性如何落地。 database">
+      <h3>事务与并发控制</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+        A[&quot;事务 ACID&quot;] --&gt; B[&quot;隔离级别&quot;]
+        B --&gt; C[&quot;锁/两段锁&quot;]
+        B --&gt; D[&quot;MVCC&lt;br/&gt;版本链/ReadView&quot;]
+        C --&gt; E[&quot;阻塞/死锁&quot;]
+        D --&gt; F[&quot;快照读/当前读&quot;]
+        E --&gt; G[&quot;监控与优化&quot;]</code></pre>
+      <p class="diagram-caption">数据库面试的主线是并发一致性如何落地。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="索引访问路径 索引题必须能落到执行计划和访问路径。 index">
+      <h3>索引访问路径</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+        Q[&quot;SQL 条件&quot;] --&gt; O[&quot;优化器&quot;]
+        O --&gt; I[&quot;B+Tree 索引&quot;]
+        I --&gt; R[&quot;回表/覆盖索引&quot;]
+        R --&gt; S[&quot;排序/分组/连接&quot;]
+        S --&gt; E[&quot;EXPLAIN 验证&quot;]</code></pre>
+      <p class="diagram-caption">索引题必须能落到执行计划和访问路径。</p>
+    </article>
+  </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>Mermaid 渲染说明</h2>
+      <ul class="knowledge-list">
+        <li class="knowledge-card">
+          <b class="knowledge-title">离线阅读与源码保底</b>
+          <p>页面会尝试从 jsDelivr 和 unpkg 加载 Mermaid，并使用 <code>mermaid.initialize</code> 与 <code>mermaid.run</code> 渲染图谱。</p>
+          <p class="knowledge-note">注释：如果网络不可用，原始 Mermaid 源码仍然保留在 <code>mermaid-raw</code> 折叠块里，不会影响正文阅读。</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="source-material" class="section source-material" data-search-section>
+      <h2>原文资料转写</h2>
+      <p>以下内容从原始 Markdown 转为 HTML，并保留原有目录、图片、折叠追问、代码与参考链接。</p>
+      <div class="source-body"><h1 id="数据库">数据库</h1>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div>数据库基础</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#事务的概念和特性">事务的概念和特性？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#会出现哪些并发一致性问题">会出现哪些并发一致性问题？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#数据库的四种隔离级别">数据库的四种隔离级别？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#什么是乐观锁和悲观锁">什么是乐观锁和悲观锁？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#常见的封锁类型">常见的封锁类型？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#什么是三级封锁协议">什么是三级封锁协议？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#四种隔离级别的实现原理">四种隔离级别的实现原理？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#什么是两段锁协议">什么是两段锁协议？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#什么是-mvcc">什么是 MVCC？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#数据库的范式">数据库的范式？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#列举几种表连接方式">列举几种表连接方式？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#什么是存储过程有哪些优缺点">什么是存储过程？有哪些优缺点？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#dropdeletetruncate的区别">Drop/Delete/Truncate的区别？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#什么是视图什么是游标">什么是视图？什么是游标？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div>MySQL</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#数据库索引的实现原理b树">数据库索引的实现原理（B+树）</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#使用索引的优点">使用索引的优点</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#哪些情况下索引会失效">哪些情况下索引会失效？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#在哪些地方适合创建索引">在哪些地方适合创建索引？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#索引的分类">索引的分类？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#mysql的两种存储引擎-innodb-和-myisam-的区别">MySQL的两种存储引擎 InnoDB 和 MyISAM 的区别？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#如何优化数据库">如何优化数据库？</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="#什么是主从复制实现原理是什么">什么是主从复制？实现原理是什么？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div>NoSQL/Redis</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">*</span><div><a href="关系型数据库和非关系型数据库的区别">关系型数据库和非关系型数据库的区别？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#参考">参考</a></div></div>
+</div>
+<hr>
+<h3 id="事务的概念和特性">事务的概念和特性？</h3>
+<p>概念：事务（Transaction）是一个操作序列，不可分割的工作单位，以BEGIN TRANSACTION开始，以ROLLBACK/COMMIT结束</p>
+<p>特性（ACID）：</p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>原子性</strong>（Atomicity）：逻辑上是不可分割的操作单元，事务的所有操作要么全部提交成功，要么全部失败回滚（用回滚日志实现，反向执行日志中的操作）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>一致性</strong>（Consistency）：事务的执行必须使数据库保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>隔离性</strong>（Isolation）：一个事务所做的修改在最终提交以前，对其它事务是不可见的（并发执行的事务之间不能相互影响）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>持久性</strong>（Durability）：一旦事务提交成功，对数据的修改是永久性的</div></div>
+</div>
+<h3 id="会出现哪些并发一致性问题">会出现哪些并发一致性问题？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>丢失修改</strong>：一个事务对数据进行了修改，在事务提交之前，另一个事务对同一个数据进行了修改，覆盖了之前的修改；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>脏读</strong>（Dirty Read）：一个事务读取了被另一个事务修改、但未提交（进行了回滚）的数据，造成两个事务得到的数据不一致；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>不可重复读</strong>（Nonrepeatable Read）：在同一个事务中，某查询操作在一个时间读取某一行数据和之后一个时间读取该行数据，发现数据已经发生修改（针对<strong>update</strong>操作）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>幻读</strong>（Phantom Read）：当同一查询多次执行时，由于其它事务在这个数据范围内执行了插入操作，会导致每次返回不同的结果集（和不可重复读的区别：针对的是一个数据整体/范围；并且针对<strong>insert</strong>操作）</div></div>
+</div>
+<h3 id="数据库的四种隔离级别">数据库的四种隔离级别？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>未提交读</strong>（Read Uncommited）：在一个事务提交之前，它的执行结果对其它事务也是可见的。会导致脏读、不可重复读、幻读；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>提交读</strong>（Read Commited）：一个事务只能看见已经提交的事务所作的改变。可避免脏读问题；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>可重复读</strong>（Repeatable Read）：可以确保同一个事务在多次读取同样的数据时得到相同的结果。（MySQL的默认隔离级别）。可避免不可重复读；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>可串行化</strong>（Serializable）：强制事务串行执行，使之不可能相互冲突，从而解决幻读问题。可能导致大量的超时现象和锁竞争，实际很少使用。</div></div>
+</div>
+<h3 id="什么是乐观锁和悲观锁">什么是乐观锁和悲观锁？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>悲观锁：认为数据随时会被修改，因此每次读取数据之前都会上锁，防止其它事务读取或修改数据；应用于<strong>数据更新比较频繁</strong>的场景；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>乐观锁：操作数据时不会上锁，但是更新时会判断在此期间有没有别的事务更新这个数据，若被更新过，则失败重试；适用于<strong>读多写少</strong>的场景。乐观锁的实现方式有：</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>加一个版本号或者时间戳字段，每次数据更新时同时更新这个字段；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>先读取想要更新的字段或者所有字段，更新的时候比较一下，只有字段没有变化才进行更新</div></div>
+</div>
+<h3 id="常见的封锁类型">常见的封锁类型？</h3>
+<p>意向锁是 InnoDB 自动加的， 不需用户干预。 对于 UPDATE、 DELETE 和 INSERT 语句， InnoDB 会自动给涉及数据集加排他锁（X)； 对于普通 SELECT 语句，InnoDB 不会加任何锁； 事务可以通过以下语句显式给记录集加共享锁或排他锁： 共享锁（S）：SELECT <em> FROM table_name WHERE ... LOCK IN SHARE MODE。 其他 session 仍然可以查询记录，并也可以对该记录加 share mode 的共享锁。但是如果当前事务需要对该记录进行更新操作，则很有可能造成死锁。 排他锁（X)：SELECT </em> FROM table_name WHERE ... FOR UPDATE。其他 session 可以查询该记录，但是不能对该记录加共享锁或排他锁，而是等待获得锁</p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>排它锁</strong>（Exclusive Lock）/ X锁：事务对数据加上X锁时，只允许此事务读取和修改此数据，并且其它事务不能对该数据加任何锁；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>共享锁</strong>（Shared Lock）/ S锁：加了S锁后，该事务只能对数据进行读取而不能修改，并且其它事务只能加S锁，不能加X锁</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>意向锁</strong>（Intention Locks）：</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>一个事务在获得某个<strong>数据行</strong>对象的 S 锁之前，必须先获得<strong>整个表</strong>的 IS 锁或更强的锁；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>一个事务在获得某个数据行对象的 X 锁之前，必须先获得整个表的 IX 锁；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>IS/IX 锁之间都是兼容的；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>好处：如果一个事务想要对整个表加X锁，就需要先检测是否有其它事务对该表或者该表中的某一行加了锁，这种检测非常耗时。有了意向锁之后，只需要检测整个表是否存在IX/IS/X/S锁就行了</div></div>
+</div>
+<p>锁的作用：用于管理对共享资源的并发访问，保证数据库的完整性和一致性</p>
+<details class="source-detail">
+<summary>封锁粒度的概念</summary>
+<p>MySQL 中提供了两种封锁粒度：<strong>行级锁</strong>以及<strong>表级锁</strong>。</p>
+<p>封锁粒度小：</p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>好处：锁定的数据量越少，发生锁争用的可能就越小，系统的<strong>并发程度</strong>就越高；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>坏处：<strong>系统开销</strong>大（加锁、释放锁、检查锁的状态都需要消耗资源）</div></div>
+</div>
+</details>
+<details class="source-detail">
+<summary>MySQL加锁</summary>
+<pre class="code-block"><code>SELECT ... LOCK In SHARE MODE;
+SELECT ... FOR UPDATE;</code></pre>
+</details>
+<h3 id="什么是三级封锁协议">什么是三级封锁协议？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>一级封锁协议：事务在修改数据之前必须先对其加X锁，直到事务结束才释放。可以解决丢失修改问题（两个事务不能同时对一个数据加X锁，避免了修改被覆盖）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>二级封锁协议：在一级的基础上，事务在读取数据之前必须先加S锁，读完后释放。可以解决脏读问题（如果已经有事务在修改数据，就意味着已经加了X锁，此时想要读取数据的事务并不能加S锁，也就无法进行读取，避免了读取脏数据）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>三级封锁协议：在二级的基础上，事务在读取数据之前必须先加S锁，直到事务结束才能释放。可以解决不可重复读问题（避免了在事务结束前其它事务对数据加X锁进行修改，保证了事务期间数据不会被其它事务更新）</div></div>
+</div>
+<h3 id="四种隔离级别的实现原理">四种隔离级别的实现原理？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>未提交读（Read Uncommited）：啥都不做。；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>（一级封锁协议 ----&gt; 解决丢失修改）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>提交读（Read Commited）：二级封锁协议 ----&gt; 解决脏读。；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>可重复读（Repeatable Read）:  三级封锁协议 ----&gt; 解决不可重复读。；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>可串行化（Serializable）：强制事务串行执行 ----&gt; 解决幻读问题。；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>（其中提交读和可重复读也可以由MVCC实现）；</div></div>
+</div>
+<h3 id="什么是两段锁协议">什么是两段锁协议？</h3>
+<p>事务必须严格分为两个阶段对数据进行<strong>加锁和解锁</strong>的操作，第一阶段加锁，第二阶段解锁。也就是说一个事务中一旦释放了锁，就不能再申请新锁了。</p>
+<p><strong>可串行化调度</strong>是指，通过并发控制，使得并发执行的事务结果与某个串行执行的事务结果相同。事务遵循两段锁协议是保证可串行化调度的充分条件。</p>
+<h3 id="什么是-mvcc">什么是 MVCC？</h3>
+<p>多版本并发控制（Multi-Version Concurrency Control, MVCC），MVCC在每行记录后面都保存有两个隐藏的列，用来存储<strong>创建版本号</strong>和<strong>删除版本号</strong>。</p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>创建版本号：创建一个数据行时的事务版本号（<strong>事务版本号</strong>：事务开始时的系统版本号；系统版本号：每开始一个新的事务，系统版本号就会自动递增）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>删除版本号：删除操作时的事务版本号；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>各种操作：</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>插入操作时，记录创建版本号；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>删除操作时，记录删除版本号；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>更新操作时，先记录删除版本号，再新增一行记录创建版本号；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>查询操作时，要符合以下条件才能被查询出来：删除版本号未定义或大于当前事务版本号（删除操作是在当前事务启动之后做的）；创建版本号小于或等于当前事务版本号（创建操作是事务完成或者在事务启动之前完成）</div></div>
+</div>
+<p>通过版本号减少了锁的争用，<strong>提高了系统性能</strong>；可以实现<strong>提交读</strong>和<strong>可重复读</strong>两种隔离级别，未提交读无需使用MVCC</p>
+<details class="source-detail">
+<summary>快照读与当前读</summary>
+<p>使用 MVCC 读取的是快照中的数据，这样可以减少加锁所带来的开销：</p>
+<pre class="code-block"><code>select * from table ...;</code></pre>
+<p>当前读读取的是最新的数据，需要加锁。以下第一个语句需要加 S 锁，其它都需要加 X 锁：</p>
+<pre class="code-block"><code>select * from table where ? lock in share mode;
+select * from table where ? for update;
+insert;
+update;
+delete;</code></pre>
+</details>
+<h3 id="数据库的范式">数据库的范式？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>第一范式</strong>（1NF，Normal Form）：<strong>属性不应该是可分的</strong>。举例：如果将“电话”作为一个属性（一列），是不符合1NF的，因为电话这个属性可以分解为家庭电话和移动电话...如果将“移动电话”作为一个属性，就符合1NF；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>第二范式</strong> 2NF：每个非主属性<strong>完全依赖</strong>于主属性集（候选键集）；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>B完全依赖于A，就是说A中的所有属性唯一决定B，属性少了就不能唯一决定，属性多了则有冗余（叫依赖不叫完全依赖）。举例：（学号，课程名）这个主属性集可以唯一决定成绩，但是对于学生姓名这个属性，（学号，课程名）这个属性集就是冗余的，所以学生姓名不完全依赖于（学号，课程名）这一属性集；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>主属性集/候选码集：某一组属性能够唯一确定其它的属性（主键就是从候选键集中选的一个键），而其子集不能，这样的属性组中的属性就是主属性；不在候选码集中的属性成为非主属性；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>可以通过分解来满足 2NF：将（学号，课程名，成绩）做成一张表；（学号，学生姓名）做成另一张表，避免大量的数据冗余；</div></div>
+<p>    满足1NF后，要求表中的所有列，都必须依赖于主键，而不能有任何一列与主键没有关系，也就是说一个表只描述一件事情；</p>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>第三范式</strong> 3NF：在 2NF 的基础上，非主属性<strong>不传递依赖</strong>于主属性</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>传递依赖：如果C依赖于B，B依赖于A，那么C传递依赖于A；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>3NF在2NF的基础上，消除了非主属性之间的依赖；比如一个表中，主属性有（学号），非主属性有（姓名，院系，院长名），可以看到院长名这个非主属性依赖于院系，传递依赖于学号。消除的办法是分解。</div></div>
+<p>    必须先满足第二范式（2NF），要求：表中的每一列只与主键直接相关而不是间接相关，（表中的每一列只能依赖于主键）；</p>
+</div>
+<details class="source-detail">
+<summary>不符合范式会出现哪些异常？</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>冗余数据：某些同样的数据多次出现（如学生姓名）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>修改异常：修改了一个记录中的信息，另一个记录中相同的信息却没有修改；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>删除异常：删除一个信息，那么也会丢失其它信息（删除一个课程，丢失了一个学生的信息）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>插入异常：无法插入（插入一个还没有课程信息的学生）</div></div>
+</div>
+</details>
+<h3 id="列举几种表连接方式">列举几种表连接方式？</h3>
+<figure class="source-figure"><img src="_v_images/20191207081711185_20242.png" alt="SQL连接"><figcaption>SQL连接</figcaption></figure>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>内连接（Inner Join）：仅将两个表中满足连接条件的行组合起来作为结果集</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>自然连接：只考虑属性相同的元组对；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>等值连接：给定条件进行查询</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>外连接（Outer Join）</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>左连接：左边表的所有数据都有显示出来，右边的表数据只显示共同有的那部分，没有对应的部分补NULL；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>右连接：和左连接相反；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>全外连接（Full Outer Join）：查询出左表和右表所有数据，但是去除两表的重复数据</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>交叉连接（Cross Join）：返回两表的笛卡尔积（对于所含数据分别为m、n的表，返回m*n的结果）</div></div>
+</div>
+<h3 id="什么是存储过程-有哪些优缺点">什么是存储过程？有哪些优缺点？</h3>
+<p>存储过程是事先经过编译并存储在数据库中的一段SQL语句的集合。想要实现相应的功能时，只需要调用这个存储过程就行了（类似于函数，输入具有输出参数）。</p>
+<p>优点：</p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>预先编译，而不需要每次运行时编译，提高了数据库执行<strong>效率</strong>；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>封装了一系列操作，对于一些数据交互比较多的操作，相比于单独执行SQL语句，可以<strong>减少网络通信量</strong>；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>具有<strong>可复用性</strong>，减少了数据库开发的工作量；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>安全性高</strong>，可以让没有权限的用户通过存储过程间接操作数据库；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>更<strong>易于维护</strong></div></div>
+</div>
+<p>缺点：</p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>可移植性差</strong>，存储过程将应用程序绑定到了数据库上；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>开发调试复杂</strong>：没有好的IDE；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>修改复杂</strong>，需要重新编译，有时还需要更新程序中的代码以更新调用</div></div>
+</div>
+<h3 id="drop-delete-truncate的区别">Drop/Delete/Truncate的区别？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>Delete</strong>用来删除表的全部或者<strong>部分数据</strong>，执行delete之后，用户<strong>需要提交</strong>之后才会执行，会触发表上的DELETE<strong>触发器</strong>（包含一个OLD的虚拟表，可以只读访问被删除的数据），DELETE之后表结构还在，删除很慢，一行一行地删，因为会记录日志，可以利用日志还原数据；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>Truncate</strong>删除表中的所有数据，这个操作<strong>不能回滚</strong>，也不会触发这个表上的触发器。操作比DELETE快很多（直接把表drop掉，再创建一个新表，删除的数据不能找回）。如果表中有自增（AUTO_INCREMENT）列，则重置为1；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>Drop</strong>命令从数据库中<strong>删除表</strong>，所有的数据行，索引和约束都会被删除；不能回滚，不会触发触发器；</div></div>
+</div>
+<details class="source-detail">
+<summary>什么是触发器？</summary>
+<p>触发器（TRIGGER）是由事件（比如INSERT/UPDATE/DELETE）来触发运行的操作（不能被直接调用，不能接收参数）。在数据库里以独立的对象存储，用于<strong>保证数据完整性</strong>（比如可以检验或转换数据）。</p>
+</details>
+<details class="source-detail">
+<summary>有哪些约束类型？</summary>
+<p>约束（Constraint）类型：主键（Primary Key）约束，唯一约束（Unique），检查约束，非空约束，外键（Foreign Key）约束。</p>
+</details>
+<h3 id="什么是视图-什么是游标">什么是视图？什么是游标？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>视图：从数据库的基本表中通过查询选取出来的数据组成的<strong>虚拟表</strong>（数据库中存放视图的定义）。可以对其进行增/删/改/查等操作。视图是对若干张基本表的引用，一张虚表，查询语句执行的结果，不存储具体的数据（基本表数据发生了改变，视图也会跟着改变）；可以跟基本表一样，进行增删改查操作(ps:增删改操作有条件限制)；如连表查询产生的视图无法进行，对视图的增删改会影响原表的数据。好处：</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>通过只给用户访问视图的权限，保证数据的<strong>安全性</strong>；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div><strong>简化</strong>复杂的SQL操作，隐藏数据的复杂性（比如复杂的连接）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>游标（Cursor）：用于定位在查询返回的<strong>结果集的特定行</strong>，以对特定行进行操作。使用游标可以方便地对结果集进行移动遍历，根据需要滚动或对浏览/修改任意行中的数据。主要用于交互式应用。</div></div>
+</div>
+<hr>
+<h3 id="数据库索引的实现原理-b-树">数据库索引的实现原理（B+树）</h3>
+<p>见<a href="https://github.com/wolverinn/Iridescent/blob/master/Data%20Structure.md#b%E6%A0%91" target="_blank" rel="noreferrer">数据结构部分：B树，B+树</a></p>
+<h5 id="使用b树和b-树的比较">使用B树和B+树的比较</h5>
+<p>InnoDB的索引使用的是B+树实现，B+树对比B树的好处：</p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>IO次数少：B+树的中间结点只存放索引，数据都存在叶结点中，因此中间结点可以存更多的数据，让索引树更加矮胖；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>范围查询效率更高：B树需要中序遍历整个树，只B+树需要遍历叶结点中的链表；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>查询效率更加稳定：每次查询都需要从根结点到叶结点，路径长度相同，所以每次查询的效率都差不多</div></div>
+</div>
+<h5 id="使用b树索引和哈希索引的比较">使用B树索引和哈希索引的比较</h5>
+<p>哈希索引能以 O(1) 时间进行查找，但是只支持精确查找，无法用于部分查找和范围查找，无法用于排序与分组；B树索引支持大于小于等于查找，范围查找。哈希索引遇到大量哈希值相等的情况后查找效率会降低。哈希索引不支持数据的排序。</p>
+<h3 id="使用索引的优点">使用索引的优点</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>大大加快了数据的<strong>检索速度</strong>；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>可以显著减少查询中<strong>分组和排序</strong>的时间；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>将随机 I/O 变为<strong>顺序 I/O</strong>（B+Tree 索引是有序的，会将相邻的数据都存储在一起）</div></div>
+</div>
+<p>缺点：建立和维护索引耗费时间空间，更新索引很慢。</p>
+<h3 id="哪些情况下索引会失效">哪些情况下索引会失效？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>以“%(表示任意0个或多个字符)”开头的LIKE语句；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>OR语句前后没有同时使用索引；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>数据类型出现隐式转化（如varchar不加单引号的话可能会自动转换为int型）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>对于多列索引，必须满足 <strong>最左匹配原则</strong>/最左前缀原则 (最左优先，eg：多列索引col1、col2和col3，则 索引生效的情形包括 col1或col1，col2或col1，col2，col3)；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>如果MySQL估计全表扫描比索引快，则不使用索引（比如非常小的表）</div></div>
+</div>
+<h3 id="在哪些地方适合创建索引">在哪些地方适合创建索引？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>某列经常作为最大最小值；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>经常被查询的字段；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>经常用作表连接的字段；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>经常出现在ORDER BY/GROUP BY/DISDINCT后面的字段</div></div>
+</div>
+<h5 id="创建索引时需要注意什么">创建索引时需要注意什么？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>只应建立在<strong>小字段</strong>上，而不要对大文本或图片建立索引（一页存储的数据越多一次IO操作获取的数据越大效率越高）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>建立索引的字段应该<strong>非空</strong>，在MySQL中，含有空值的列很难进行查询优化，因为它们使得索引、索引的统计信息以及比较运算更加复杂。应该用0、一个特殊的值或者一个空串代替NULL；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>选择<strong>数据密度大</strong>（唯一值占总数的百分比很大）的字段作索引</div></div>
+</div>
+</details>
+<h3 id="索引的分类">索引的分类？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>普通索引</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>唯一索引 UNIQUE：索引列的值必须唯一，但允许有空值；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>主键索引 PRIMARY KEY：必须唯一，不允许空值（是一种特殊的唯一索引；MySQL创建主键时默认为聚集索引，但主键也可以是非聚集索引）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>单列索引和多列索引/复合索引（Composite）：索引的列数；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>覆盖（Covering）索引：索引包含了所有满足查询所需要的数据，查询的时候只需要读取索引而不需要回表读取数据；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>聚集（Clustered）索引/非聚集索引：对磁盘上存放数据的物理地址重新组织以使这些数据按照指定规则排序的一种索引（数据的物理排列顺序和索引排列顺序一致）。因此每张表只能创建一个聚集索引（因为要改变物理存储顺序）。优点是查询速度快，因为可以直接按照顺序得到需要数据的物理地址。缺点是进行修改的速度较慢。对于需要经常搜索范围的值很有效。非聚集索引只记录逻辑顺序，并不改变物理顺序；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>分区索引（？）</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>虚拟索引（Virtual）：模拟索引的存在而不用真正创建一个索引，用于快速测试创建索引对执行计划的影响。没有相关的索引段，不增加存储空间的使用</div></div>
+</div>
+<h3 id="mysql的两种存储引擎-innodb-和-myisam-的区别">MySQL的两种存储引擎 InnoDB 和 MyISAM 的区别？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>InnoDB<strong>支持事务</strong>，可以进行Commit和Rollback；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>MyISAM 只支持表级锁，而 InnoDB 还<strong>支持行级锁</strong>，提高了并发操作的性能；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>InnoDB <strong>支持外键</strong>；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>MyISAM <strong>崩溃</strong>后发生损坏的概率比 InnoDB 高很多，而且<strong>恢复的速度</strong>也更慢；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>MyISAM 支持<strong>压缩</strong>表和空间数据索引，InnoDB需要更多的内存和存储；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>InnoDB 支持在线<strong>热备份</strong></div></div>
+</div>
+<details class="source-detail">
+<summary>应用场景</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>MyISAM</strong> 管理非事务表。它提供高速存储和检索（MyISAM强调的是性能，每次查询具有原子性，其执行速度比InnoDB更快），以及全文搜索能力。如果表比较小，或者是只读数据（有大量的SELECT），还是可以使用MyISAM；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><strong>InnoDB</strong> 支持事务，并发情况下有很好的性能，基本可以替代MyISAM</div></div>
+</div>
+</details>
+<details class="source-detail">
+<summary>热备份和冷备份</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>热备份：在数据库运行的情况下备份的方法。优点：可按表或用户备份，备份时数据库仍可使用，可恢复至任一时间点。但是不能出错</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>冷备份：数据库正常关闭后，将关键性文件复制到另一位置的备份方式。优点：操作简单快速，恢复简单</div></div>
+</div>
+</details>
+<p>更详细的可以参考：<a href="https://imageslr.github.io/2020/db-engine.html" target="_blank" rel="noreferrer">MySQL 数据库的存储引擎与适用场景 - Images</a></p>
+<h3 id="如何优化数据库">如何优化数据库？</h3>
+<details class="source-detail">
+<summary>SQL 语句的优化</summary>
+<blockquote>分析慢查询日志：记录了在MySQL中响应时间超过阀值long_query_time的SQL语句，通过日志去找出IO大的SQL以及发现未命中索引的SQL</blockquote>
+<blockquote>使用 Explain 进行分析：通过explain命令可以得到表的读取顺序、数据读取操作的操作类型、哪些索引可以使用、<strong>哪些索引被实际使用</strong>、表之间的引用以及<strong>被扫描的行数</strong>等问题；</blockquote>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>应尽量避免在 where 子句中使用<code>!=</code>、<code>&lt;</code>、<code>&gt;</code>操作符或对字段进行null值判断，否则将引擎放弃使用索引而进行全表扫描；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>只返回必要的列：最好不要使用 SELECT * 语句；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>只返回必要的行：使用 LIMIT 语句来限制返回的数据；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>将一个大连接查询分解成对每一个表进行一次单表查询，然后在应用程序中进行关联，这样做的好处有：</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>让缓存更高效。对于连接查询，如果其中一个表发生变化，那么整个查询缓存就无法使用。而分解后的多个查询，即使其中一个表发生变化，对其它表的查询缓存依然可以使用；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>分解成多个单表查询，这些单表查询的缓存结果更可能被其它查询使用到，从而减少冗余的查询；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>减少锁竞争</div></div>
+</div>
+</details>
+<details class="source-detail">
+<summary>索引的优化</summary>
+<p>注意会引起索引失效的情况，以及在适合的地方建立索引</p>
+</details>
+<details class="source-detail">
+<summary>数据库表结构的优化</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>设计表时遵循<strong>三大范式</strong>；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>选择合适的<strong>数据类型</strong>：尽可能不要存储NULL字段；使用简单的数据类型（int, varchar/ text）；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>表的<strong>水平切分</strong>（Sharding）：将同一个表中的记录拆分到多个结构相同的表中（策略：哈希取模；根据ID范围来分）。当一个表的数据不断增多时，Sharding 是必然的选择，它可以将数据分布到集群的不同节点上，从而缓解单个数据库的压力；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>表的<strong>垂直切分</strong>：将一张表按列切分成多个表。可以将不常用的字段单独放在同一个表中；把大字段独立放入一个表中；或者把经常使用的字段（关系密切的）放在一张表中。垂直切分之后业务更加清晰，系统之间整合或扩展容易，数据维护简单</div></div>
+</div>
+</details>
+<details class="source-detail">
+<summary>系统配置的优化</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>操作系统：增加TCP支持的队列数；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>MySQL配置文件优化：缓存池大小和个数设置</div></div>
+</div>
+</details>
+<details class="source-detail">
+<summary>硬件的优化</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>磁盘性能：固态硬盘；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>CPU：多核且高频；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>内存：增大内存</div></div>
+</div>
+</details>
+<h3 id="什么是主从复制-实现原理是什么">什么是主从复制？实现原理是什么？</h3>
+<p>主从复制（Replication）是指数据可以从一个MySQL数据库主服务器复制到一个或多个从服务器，从服务器可以复制主服务器中的所有数据库或者特定的数据库，或者特定的表。默认采用异步模式。</p>
+<p>实现原理：</p>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>主服务器 <strong>binary log dump 线程</strong>：将主服务器中的数据更改（增删改）日志写入 Binary log 中；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>从服务器 <strong>I/O 线程</strong>：负责从主服务器读取binary log，并写入本地的 Relay log；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>从服务器 <strong>SQL 线程</strong>：负责读取 Relay log，解析出主服务器已经执行的数据更改，并在从服务器中重新执行（Replay），保证主从数据的一致性</div></div>
+</div>
+<h5 id="为什么要主从复制">为什么要主从复制？</h5>
+<details class="source-detail">
+<summary>展开</summary>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>读写分离：主服务器负责写，从服务器负责读</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>缓解了锁的争用，即使主服务器中加了锁，依然可以进行读操作；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>从服务器可以使用 MyISAM，提升查询性能以及节约系统开销；</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div>增加冗余，提高可用性</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>数据实时备份，当系统中某个节点发生故障时，可以方便的故障切换</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>降低单个服务器磁盘I/O访问的频率，提高单个机器的I/O性能</div></div>
+</div>
+</details>
+<h3 id="关系型数据库和非关系型数据库的区别">关系型数据库和非关系型数据库的区别？</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>前者高度组织化结构化数据；后者存储的数据结构不固定更加灵活，可以减少一些空间和时间的开销</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>后者更加容易水平扩展</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>前者支持结构化查询语言，支持复杂的查询功能和表关联。后者只能进行简单的查询</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>前者支持事务，具有ACID特性。后者则是BASE，最终一致性</div></div>
+</div>
+<h3 id="参考">参考</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://blog.csdn.net/weixin_43433032/article/details/89293663" target="_blank" rel="noreferrer">数据库六大范式详解 -- CSDN博客</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://www.cnblogs.com/alice-cj/p/10354737.html" target="_blank" rel="noreferrer">delete，truncate 和 delete之间的区别 -- 博客园</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://baijiahao.baidu.com/s?id=1617888740370098866&amp;wfr=spider&amp;for=pc" target="_blank" rel="noreferrer">深度探索MySQL主从复制原理</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>数据库程序员面试笔试宝典-机械工业出版社</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86.md" target="_blank" rel="noreferrer">CS-Notes/数据库系统原理 -- GitHub</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://blog.csdn.net/justloveyou_/article/details/78308460" target="_blank" rel="noreferrer">面试/笔试第三弹 —— 数据库面试问题集锦 -- CSDN博客</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://www.cnblogs.com/wenxiaofei/p/9853682.html" target="_blank" rel="noreferrer">史上最全的数据库面试题，不看绝对后悔 -- 博客园</a></div></div>
+</div>
+<h3 id="待完成">待完成</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>[ ] E-R 模型</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>[ ] 数据库的三级模式和二级映像</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>[ ] <a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/MySQL.md#%E5%9B%9B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B" target="_blank" rel="noreferrer">数据类型</a>：VARCHAR和CHAR的区别，DATETIME和TIMESATMP的区别</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>[ ] Redis 面试</div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div><a href="https://github.com/CyC2018/CS-Notes/blob/master/notes/Redis.md" target="_blank" rel="noreferrer">CyC2018</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div><a href="https://blog.csdn.net/Butterfly_resting/article/details/89668661" target="_blank" rel="noreferrer">几率大的Redis面试题（含答案） - CSDN</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div><a href="https://www.jianshu.com/p/65765dd10671" target="_blank" rel="noreferrer">Redis面试题总结 - 简书</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div><a href="https://www.cnblogs.com/jasontec/p/9699242.html" target="_blank" rel="noreferrer">Redis常见面试题 - 博客园</a></div></div>
+<div class="md-list-row depth-1"><span class="md-marker">-</span><div><a href="https://github.com/0voice/interview_internal_reference#10" target="_blank" rel="noreferrer">0voice/interviewinternalreference</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>[ ] <a href="https://www.cnblogs.com/wenxiaofei/p/9853682.html" target="_blank" rel="noreferrer">史上最全的数据库面试题，不看绝对后悔 -- 博客园</a></div></div>
+</div></div>
+    </section>
+
+    <section id="review-plan" class="section" data-search-section>
+      <h2>3 / 5 / 7 天复习计划</h2>
+      <ul class="knowledge-list">
+        <li class="knowledge-card">
+          <b class="knowledge-title">3 天：先过主干</b>
+          <p>第一遍只看目录、逐章复习卡和 Mermaid 图谱，把每个章节整理成一句话定义与一个典型追问。</p>
+          <p class="knowledge-note">注释：这一轮不要陷入细枝末节，目标是建立完整地图。</p>
+        </li>
+        <li class="knowledge-card">
+          <b class="knowledge-title">5 天：补齐追问</b>
+          <p>第二遍打开原文折叠块，按“机制、边界、故障、指标、命令”补答案，遇到不会的地方回到原文或权威资料。</p>
+          <p class="knowledge-note">注释：能讲清追问，才算从“看过”变成“能答”。</p>
+        </li>
+        <li class="knowledge-card">
+          <b class="knowledge-title">7 天：模拟面试</b>
+          <p>第三遍用页内搜索随机抽题，强迫自己 2 分钟内回答，再对照原文和复习卡补证据链。</p>
+          <p class="knowledge-note">注释：最后一天只修表达，不再大面积新增材料，保证临场稳定。</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>来源与授权</h2>
+      <div class="license-note">
+        <p>本页是基于 <a href="https://github.com/wolverinn/Waking-Up" target="_blank" rel="noreferrer">wolverinn/Waking-Up</a> 的 GPLv3 授权资料生成的本地 HTML 改编版。源文件：<a href="https://github.com/wolverinn/Waking-Up/blob/cf692b5/Database.md" target="_blank" rel="noreferrer">Database.md</a>，源提交：<code>cf692b5</code>。</p>
+        <p>输出目录内已复制 <code>LICENSE</code>。如果这些 HTML 被公开分发，应继续保留 GPLv3 授权、原始来源、修改说明与对应源码/生成脚本。</p>
+      </div>
+    </section>
+
+    <div id="noResults" class="no-results">没有找到匹配内容。换一个关键词试试。</div>
+  </main>
+  <script>
+    const searchInput = document.getElementById("search");
+    const noResults = document.getElementById("noResults");
+    const searchable = [...document.querySelectorAll("[data-search-section]")];
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      searchable.forEach((section) => {
+        const haystack = section.textContent.toLowerCase();
+        const match = !query || haystack.includes(query);
+        section.classList.toggle("hidden-by-search", !match);
+        if (match) visible += 1;
+      });
+      noResults.classList.toggle("visible", query && visible === 0);
+    });
+
+    async function loadMermaid() {
+      const urls = [
+        "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js",
+        "https://unpkg.com/mermaid@10/dist/mermaid.min.js"
+      ];
+      for (const url of urls) {
+        try {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = url;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+          if (window.mermaid) return window.mermaid;
+        } catch {}
+      }
+      return null;
+    }
+
+    async function renderMermaid() {
+      const blocks = [...document.querySelectorAll(".mermaid-source")];
+      if (!blocks.length) return;
+      const mermaidLib = await loadMermaid();
+      blocks.forEach((block, index) => {
+        const code = block.textContent;
+        const figure = document.createElement("figure");
+        figure.className = "mermaid-figure";
+        const diagram = document.createElement("div");
+        diagram.className = "mermaid";
+        diagram.id = "mermaid-diagram-" + index;
+        diagram.textContent = code;
+        const raw = document.createElement("details");
+        raw.className = "mermaid-raw";
+        raw.innerHTML = "<summary>查看 Mermaid 源码</summary><pre><code></code></pre>";
+        raw.querySelector("code").textContent = code;
+        figure.appendChild(diagram);
+        figure.appendChild(raw);
+        block.replaceWith(figure);
+      });
+      if (!mermaidLib) {
+        document.querySelectorAll(".mermaid-figure").forEach((figure) => {
+          const error = document.createElement("div");
+          error.className = "mermaid-error";
+          error.textContent = "Mermaid CDN 加载失败，已保留源码。";
+          figure.appendChild(error);
+        });
+        return;
+      }
+      mermaidLib.initialize({
+        startOnLoad: false,
+        securityLevel: "loose",
+        theme: "base",
+        themeVariables: {
+          fontFamily: "Microsoft YaHei, Noto Sans SC, system-ui, sans-serif",
+          fontSize: "15px",
+          primaryColor: "#f6f5f2",
+          primaryTextColor: "#242424",
+          primaryBorderColor: "#d8d5cb",
+          lineColor: "#6f6f6f",
+          secondaryColor: "#f0f5ff",
+          tertiaryColor: "#eef7f5",
+          noteBkgColor: "#fff8e7",
+          noteTextColor: "#242424"
+        },
+        flowchart: {
+          htmlLabels: true,
+          useMaxWidth: false,
+          curve: "basis",
+          nodeSpacing: 42,
+          rankSpacing: 54,
+          padding: 12
+        },
+        sequence: {
+          mirrorActors: false,
+          useMaxWidth: true
+        }
+      });
+      try {
+        await mermaidLib.run({ querySelector: ".mermaid" });
+      } catch (error) {
+        document.querySelectorAll(".mermaid-figure").forEach((figure) => {
+          if (figure.querySelector("svg")) return;
+          const box = document.createElement("div");
+          box.className = "mermaid-error";
+          box.textContent = "Mermaid 渲染失败：" + (error && error.message ? error.message : String(error));
+          figure.appendChild(box);
+        });
+      }
+    }
+    renderMermaid();
+  </script>
+</body>
+</html>

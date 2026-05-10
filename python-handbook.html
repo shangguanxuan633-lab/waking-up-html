@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Python 面试复习</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --paper: #ffffff;
+      --book: #fbfaf7;
+      --ink: #242424;
+      --muted: #686868;
+      --line: #e5e3dc;
+      --line-strong: #d8d5cb;
+      --blue: #315fbc;
+      --teal: #0f766e;
+      --amber: #9a6700;
+      --soft-blue: #f0f5ff;
+      --soft-teal: #ecfdf5;
+      --soft-amber: #fff8e7;
+      --soft-rose: #fff1f2;
+      --shadow: 0 10px 28px rgba(36, 36, 36, .06);
+      --book-shadow: 0 22px 70px rgba(36, 36, 36, .08);
+      --accent: var(--blue);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.74;
+      letter-spacing: 0;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 250, 247, .94);
+      backdrop-filter: blur(12px);
+    }
+    .topbar-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 10px 18px;
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(220px, 420px);
+      gap: 14px;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--soft-blue);
+      border: 1px solid var(--line-strong);
+      color: var(--blue);
+      flex: none;
+      font-size: 14px;
+    }
+    .brand span:last-child {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .searchbox {
+      width: 100%;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+    }
+    .searchbox:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(49, 95, 188, .12);
+    }
+    .layout {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 18px 52px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+    .hero {
+      min-height: 360px;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(240, 245, 255, .86), rgba(236, 253, 245, .54) 48%, rgba(255, 248, 231, .82)),
+        var(--book);
+      box-shadow: var(--book-shadow);
+      display: grid;
+      gap: 22px;
+      align-content: end;
+    }
+    .eyebrow {
+      margin: 0;
+      color: var(--accent);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      max-width: 980px;
+    }
+    .hero-copy {
+      max-width: 980px;
+      margin: 0;
+      font-size: 18px;
+      color: #3e3e3e;
+    }
+    .meta-grid,
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .meta-item,
+    .stat-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .74);
+      padding: 12px;
+      min-width: 0;
+    }
+    .meta-item b,
+    .stat-item b {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .meta-item span,
+    .stat-item span {
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    .section > p {
+      margin: 8px 0 14px;
+      color: #424242;
+    }
+    .toc-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .toc-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--book);
+      color: var(--ink);
+      font-size: 14px;
+      max-width: 100%;
+    }
+    .toc-pill:hover,
+    .toc-pill.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .level-3 { background: #fff; }
+    .knowledge-list,
+    .diagram-grid,
+    .qa-grid,
+    .case-grid,
+    .code-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .knowledge-card,
+    .diagram-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--book);
+      padding: 16px;
+      min-width: 0;
+    }
+    .compact-card { background: #fff; }
+    .knowledge-title {
+      display: block;
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.42;
+      margin-bottom: 8px;
+    }
+    .knowledge-card p {
+      margin: 8px 0 0;
+      color: #3f3f3f;
+    }
+    .knowledge-note {
+      border-left: 3px solid var(--accent);
+      padding-left: 10px;
+      color: #555;
+      background: rgba(255, 255, 255, .58);
+    }
+    .diagram-card h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+    .diagram-caption {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .mermaid-figure {
+      margin: 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      overflow-x: auto;
+    }
+    .mermaid {
+      min-width: 620px;
+    }
+    .mermaid svg {
+      max-width: none;
+      height: auto;
+    }
+    .mermaid-raw {
+      margin-top: 10px;
+    }
+    .mermaid-raw summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .mermaid-error {
+      margin-top: 10px;
+      border: 1px solid #fecdd3;
+      border-radius: 8px;
+      background: var(--soft-rose);
+      color: #9f1239;
+      padding: 10px;
+    }
+    .source-material {
+      background: var(--paper);
+    }
+    .source-body {
+      max-width: 1060px;
+    }
+    .source-body h1,
+    .source-body h2,
+    .source-body h3,
+    .source-body h4 {
+      scroll-margin-top: 82px;
+      letter-spacing: 0;
+    }
+    .source-body h1 {
+      font-size: 34px;
+      margin: 4px 0 18px;
+    }
+    .source-body h2 {
+      font-size: 27px;
+      margin: 30px 0 12px;
+    }
+    .source-body h3 {
+      font-size: 22px;
+      margin: 28px 0 10px;
+      padding-top: 6px;
+      border-top: 1px solid var(--line);
+    }
+    .source-body h4,
+    .source-body h5,
+    .source-body h6 {
+      font-size: 18px;
+      margin: 22px 0 8px;
+    }
+    .source-body p {
+      margin: 10px 0;
+    }
+    .md-list {
+      display: grid;
+      gap: 6px;
+      margin: 10px 0 14px;
+    }
+    .md-list-row {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr);
+      gap: 7px;
+      align-items: start;
+    }
+    .md-list-row.depth-1 { padding-left: 20px; }
+    .md-list-row.depth-2 { padding-left: 40px; }
+    .md-list-row.depth-3 { padding-left: 60px; }
+    .md-list-row.depth-4 { padding-left: 80px; }
+    .md-list-row.depth-5 { padding-left: 100px; }
+    .md-marker {
+      color: var(--accent);
+      font-weight: 800;
+      text-align: right;
+    }
+    code {
+      font-family: Consolas, "Cascadia Code", "SFMono-Regular", monospace;
+      background: #f3f1ea;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 1px 5px;
+      font-size: .92em;
+    }
+    .code-block,
+    .mermaid-source,
+    .mermaid-raw pre {
+      margin: 12px 0;
+      padding: 14px;
+      overflow-x: auto;
+      background: #1f2937;
+      color: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #111827;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+    .code-block code,
+    .mermaid-source code,
+    .mermaid-raw code {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      color: inherit;
+    }
+    blockquote {
+      margin: 12px 0;
+      padding: 10px 14px;
+      border-left: 4px solid var(--accent);
+      background: var(--soft-amber);
+      color: #4b4638;
+    }
+    .source-detail {
+      margin: 12px 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px 12px;
+    }
+    .source-detail summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-weight: 800;
+    }
+    .source-figure,
+    .source-html-center {
+      margin: 16px 0;
+      text-align: center;
+    }
+    .avatar-figure {
+      display: inline-block;
+      margin: 6px;
+      vertical-align: middle;
+    }
+    .avatar-figure img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+    .source-figure img,
+    .inline-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .source-figure figcaption {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .source-link-wrap {
+      display: inline-block;
+      max-width: 100%;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+      min-width: 110px;
+    }
+    th {
+      background: var(--soft-blue);
+      text-align: left;
+    }
+    .license-note {
+      border: 1px solid var(--line-strong);
+      background: var(--soft-amber);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .hidden-by-search { display: none !important; }
+    .no-results {
+      display: none;
+      border: 1px solid #fecdd3;
+      background: var(--soft-rose);
+      color: #9f1239;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .no-results.visible { display: block; }
+    @media (max-width: 720px) {
+      .topbar-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .layout {
+        padding: 18px 12px 36px;
+      }
+      .hero,
+      .section {
+        padding: 18px;
+      }
+      h1 {
+        font-size: 34px;
+      }
+      .hero-copy {
+        font-size: 16px;
+      }
+      .md-list-row.depth-3,
+      .md-list-row.depth-4,
+      .md-list-row.depth-5 {
+        padding-left: 24px;
+      }
+      .mermaid {
+        min-width: 520px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="返回总览">
+        <span class="brand-mark">WU</span>
+        <span>Python 面试复习</span>
+      </a>
+      <input id="search" class="searchbox" type="search" placeholder="搜索本页知识点、追问、命令或章节">
+    </div>
+  </header>
+  <main class="layout">
+    <section class="hero" data-search-section>
+      <div>
+        <p class="eyebrow">Waking-Up HTML · GPLv3 Derived Review</p>
+        <h1>Python 面试复习</h1>
+      </div>
+      <p class="hero-copy">覆盖生成器、迭代器、容器、GIL、装饰器、垃圾回收、拷贝与基础语法。</p>
+      <div class="meta-grid">
+        <div class="meta-item"><b>源文件</b><span>Python Handbook.md</span></div>
+        <div class="meta-item"><b>源提交</b><span>cf692b5</span></div>
+        <div class="meta-item"><b>生成时间</b><span>2026/05/10 20:09:57 Asia/Shanghai</span></div>
+        <div class="meta-item"><b>授权</b><span>GPLv3，保留原作者与来源</span></div>
+      </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>资料入口</h2>
+      <div class="toc-row"><a class="toc-pill" href="index.html">总览</a><a class="toc-pill" href="computer-network.html">计算机网络</a><a class="toc-pill" href="operating-systems.html">操作系统</a><a class="toc-pill" href="database.html">数据库</a><a class="toc-pill" href="design-pattern.html">设计模式</a><a class="toc-pill" href="git-commandline-rest.html">Git/REST/命令行</a><a class="toc-pill active" href="python-handbook.html">Python</a></div>
+      <p>相关页：<a href="index.html">总览</a><a href="computer-network.html">计算机网络</a><a href="operating-systems.html">操作系统</a><a href="database.html">数据库</a><a href="design-pattern.html">设计模式</a><a href="git-commandline-rest.html">Git/REST/命令行</a></p>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>本页统计</h2>
+      <div class="stat-grid">
+        <div class="stat-item"><b>原文行数</b><span>177</span></div>
+        <div class="stat-item"><b>标题节点</b><span>20</span></div>
+        <div class="stat-item"><b>折叠追问</b><span>3</span></div>
+        <div class="stat-item"><b>图片</b><span>1</span></div>
+        <div class="stat-item"><b>代码块</b><span>27</span></div>
+        <div class="stat-item"><b>列表行</b><span>33</span></div>
+      </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>页内目录</h2>
+      <div class="toc-row">
+        <a class="toc-pill" href="#review-cards">逐章复习卡</a>
+        <a class="toc-pill" href="#visual-atlas">Mermaid 图谱</a>
+        <a class="toc-pill" href="#source-material">原文资料转写</a>
+        <a class="toc-pill" href="#review-plan">复习计划</a>
+        <a class="toc-pill level-1" href="#python">Python</a><a class="toc-pill level-2" href="#什么是-python-生成器">什么是 Python 生成器？</a><a class="toc-pill level-2" href="#什么是-python-迭代器">什么是 Python 迭代器？</a><a class="toc-pill level-2" href="#list-和-tuple-有什么区别">list 和 tuple 有什么区别？</a><a class="toc-pill level-2" href="#python-中的-list-和-dict-是怎么实现的">Python 中的 list 和 dict 是怎么实现的？</a><a class="toc-pill level-2" href="#python-中使用多线程可以达到多核cpu一起使用吗">Python 中使用多线程可以达到多核CPU一起使用吗？</a><a class="toc-pill level-2" href="#gil-global-interpreter-lock">GIL(Global Interpreter Lock)</a><a class="toc-pill level-3" href="#gil的设计初衷">GIL的设计初衷?</a><a class="toc-pill level-3" href="#为什么要加在解释器-而不是在其他层">为什么要加在解释器,而不是在其他层?</a><a class="toc-pill level-3" href="#gil的实现是线程不安全-为什么">GIL的实现是线程不安全?为什么?</a><a class="toc-pill level-2" href="#什么是装饰器">什么是装饰器？</a><a class="toc-pill level-2" href="#python-中的垃圾回收机制">Python 中的垃圾回收机制？</a><a class="toc-pill level-2" href="#什么是-lambda-表达式">什么是 lambda 表达式？</a><a class="toc-pill level-2" href="#什么是深拷贝和浅拷贝">什么是深拷贝和浅拷贝？</a><a class="toc-pill level-2" href="#双等于和-is-有什么区别">双等于和 is 有什么区别？</a><a class="toc-pill level-2" href="#其它-python-知识点">其它 Python 知识点</a><a class="toc-pill level-3" href="#类型转换">类型转换</a><a class="toc-pill level-3" href="#try-except">try...except</a><a class="toc-pill level-3" href="#list">list</a><a class="toc-pill level-3" href="#参考">参考</a>
+      </div>
+    </section>
+
+    
+
+    <section class="section" data-search-section>
+      <h2>能力地图</h2>
+      <ul class="knowledge-list">
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P4/P5</b>
+      <p>能准确复述概念、常见流程、基本优缺点，回答不混淆术语。</p>
+      <p class="knowledge-note">注释：复习 Python 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P6</b>
+      <p>能把概念和机制连起来，说明常见失败场景、复杂度、边界条件。</p>
+      <p class="knowledge-note">注释：复习 Python 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P7</b>
+      <p>能结合生产指标、命令、日志、容量和取舍，主动补充排障证据。</p>
+      <p class="knowledge-note">注释：复习 Python 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  
+    <li class="knowledge-card compact-card">
+      <b class="knowledge-title">P8/P9</b>
+      <p>能从系统设计、平台治理、风险控制和团队规范层面讲清可落地方案。</p>
+      <p class="knowledge-note">注释：复习 Python 时，把每个章节都至少提升到 P6 表达；重点章节准备 P7+ 的证据链。</p>
+    </li>
+  </ul>
+    </section>
+
+    <section id="review-cards" class="section" data-search-section>
+      <h2>逐章复习卡</h2>
+      <p>下面按原文标题一对一生成复习卡，不替代原文，而是帮你把每个章节转成面试表达路径。</p>
+      <ul class="knowledge-list">
+    <li class="knowledge-card" data-search="什么是 Python 生成器？ python">
+      <b class="knowledge-title">1. 什么是 Python 生成器？</b>
+      <p>原文对应章节：<a href="#什么是-python-生成器">什么是 Python 生成器？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是 Python 迭代器？ python">
+      <b class="knowledge-title">2. 什么是 Python 迭代器？</b>
+      <p>原文对应章节：<a href="#什么是-python-迭代器">什么是 Python 迭代器？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="list 和 tuple 有什么区别？ python">
+      <b class="knowledge-title">3. list 和 tuple 有什么区别？</b>
+      <p>原文对应章节：<a href="#list-和-tuple-有什么区别">list 和 tuple 有什么区别？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="Python 中的 list 和 dict 是怎么实现的？ python">
+      <b class="knowledge-title">4. Python 中的 list 和 dict 是怎么实现的？</b>
+      <p>原文对应章节：<a href="#python-中的-list-和-dict-是怎么实现的">Python 中的 list 和 dict 是怎么实现的？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="Python 中使用多线程可以达到多核CPU一起使用吗？ python">
+      <b class="knowledge-title">5. Python 中使用多线程可以达到多核CPU一起使用吗？</b>
+      <p>原文对应章节：<a href="#python-中使用多线程可以达到多核cpu一起使用吗">Python 中使用多线程可以达到多核CPU一起使用吗？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：先区分资源边界和调度边界，再说内核对象、上下文切换成本、常见阻塞点和 Linux 命令证据。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="GIL(Global Interpreter Lock) python">
+      <b class="knowledge-title">6. GIL(Global Interpreter Lock)</b>
+      <p>原文对应章节：<a href="#gil-global-interpreter-lock">GIL(Global Interpreter Lock)</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="GIL的设计初衷? python">
+      <b class="knowledge-title">7. GIL的设计初衷?</b>
+      <p>原文对应章节：<a href="#gil的设计初衷">GIL的设计初衷?</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="为什么要加在解释器,而不是在其他层? python">
+      <b class="knowledge-title">8. 为什么要加在解释器,而不是在其他层?</b>
+      <p>原文对应章节：<a href="#为什么要加在解释器-而不是在其他层">为什么要加在解释器,而不是在其他层?</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="GIL的实现是线程不安全?为什么? python">
+      <b class="knowledge-title">9. GIL的实现是线程不安全?为什么?</b>
+      <p>原文对应章节：<a href="#gil的实现是线程不安全-为什么">GIL的实现是线程不安全?为什么?</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：先区分资源边界和调度边界，再说内核对象、上下文切换成本、常见阻塞点和 Linux 命令证据。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是装饰器？ python">
+      <b class="knowledge-title">10. 什么是装饰器？</b>
+      <p>原文对应章节：<a href="#什么是装饰器">什么是装饰器？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：设计模式题先讲意图和适用变化点，再讲参与角色、类关系、优缺点和过度设计风险。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="Python 中的垃圾回收机制？ python">
+      <b class="knowledge-title">11. Python 中的垃圾回收机制？</b>
+      <p>原文对应章节：<a href="#python-中的垃圾回收机制">Python 中的垃圾回收机制？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是 lambda 表达式？ python">
+      <b class="knowledge-title">12. 什么是 lambda 表达式？</b>
+      <p>原文对应章节：<a href="#什么是-lambda-表达式">什么是 lambda 表达式？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="什么是深拷贝和浅拷贝？ python">
+      <b class="knowledge-title">13. 什么是深拷贝和浅拷贝？</b>
+      <p>原文对应章节：<a href="#什么是深拷贝和浅拷贝">什么是深拷贝和浅拷贝？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="双等于和 is 有什么区别？ python">
+      <b class="knowledge-title">14. 双等于和 is 有什么区别？</b>
+      <p>原文对应章节：<a href="#双等于和-is-有什么区别">双等于和 is 有什么区别？</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="其它 Python 知识点 python">
+      <b class="knowledge-title">15. 其它 Python 知识点</b>
+      <p>原文对应章节：<a href="#其它-python-知识点">其它 Python 知识点</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="类型转换 python">
+      <b class="knowledge-title">16. 类型转换</b>
+      <p>原文对应章节：<a href="#类型转换">类型转换</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="try...except python">
+      <b class="knowledge-title">17. try...except</b>
+      <p>原文对应章节：<a href="#try-except">try...except</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="list python">
+      <b class="knowledge-title">18. list</b>
+      <p>原文对应章节：<a href="#list">list</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：Python 题要从对象模型、协议、内存、引用计数/GC、运行时限制和工程替代方案展开。</p>
+    </li>
+  
+    <li class="knowledge-card" data-search="参考 python">
+      <b class="knowledge-title">19. 参考</b>
+      <p>原文对应章节：<a href="#参考">参考</a>。复习时先用一两句话讲清概念，再回到原文里的展开、追问或示例。</p>
+      <p class="knowledge-note">注释：按“定义 -&gt; 为什么存在 -&gt; 核心机制 -&gt; 生产场景 -&gt; 可验证证据 -&gt; 取舍边界 -&gt; 追问”准备，答案会比单纯背诵稳定很多。</p>
+    </li>
+  </ul>
+    </section>
+
+    <section id="visual-atlas" class="section" data-search-section>
+      <h2>Mermaid 图谱</h2>
+      <div class="diagram-grid">
+    <article class="diagram-card" data-search="Python 章节路线 从原始 Markdown 标题提取，保留一对一章节顺序。 roadmap python">
+      <h3>Python 章节路线</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+  n1[&quot;1. 什么是 Python 生成器？&quot;]
+  n2[&quot;2. 什么是 Python 迭代器？&quot;]
+  n1 --&gt; n2
+  n3[&quot;3. list 和 tuple 有什么区别？&quot;]
+  n2 --&gt; n3
+  n4[&quot;4. Python 中的 list 和 dict 是怎么实现的？&quot;]
+  n3 --&gt; n4
+  n5[&quot;5. Python 中使用多线程可以达到多核CPU一起使用吗？&quot;]
+  n4 --&gt; n5
+  n6[&quot;6. GIL(Global Interpreter Lock)&quot;]
+  n5 --&gt; n6
+  n7[&quot;7. GIL的设计初衷?&quot;]
+  n6 --&gt; n7
+  n8[&quot;8. 为什么要加在解释器,而不是在其他层?&quot;]
+  n7 --&gt; n8
+  n9[&quot;9. GIL的实现是线程不安全?为什么?&quot;]
+  n8 --&gt; n9
+  n10[&quot;10. 什么是装饰器？&quot;]
+  n9 --&gt; n10
+  n11[&quot;11. Python 中的垃圾回收机制？&quot;]
+  n10 --&gt; n11
+  n12[&quot;12. 什么是 lambda 表达式？&quot;]
+  n11 --&gt; n12</code></pre>
+      <p class="diagram-caption">从原始 Markdown 标题提取，保留一对一章节顺序。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="面试回答闭环 每个知识点都按这个闭环复习，能从背诵切到工程表达。 answer interview">
+      <h3>面试回答闭环</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+      A[&quot;一句话定义&quot;] --&gt; B[&quot;为什么存在&quot;]
+      B --&gt; C[&quot;核心机制&quot;]
+      C --&gt; D[&quot;生产场景&quot;]
+      D --&gt; E[&quot;指标/命令/证据&quot;]
+      E --&gt; F[&quot;取舍与边界&quot;]
+      F --&gt; G[&quot;高频追问&quot;]</code></pre>
+      <p class="diagram-caption">每个知识点都按这个闭环复习，能从背诵切到工程表达。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="Python 运行时重点 Python 面试主线是对象、协议、内存和运行时限制。 python">
+      <h3>Python 运行时重点</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">flowchart LR
+        Obj[&quot;对象模型&quot;] --&gt; Iter[&quot;迭代协议&quot;]
+        Iter --&gt; Gen[&quot;生成器/yield&quot;]
+        Obj --&gt; Mem[&quot;引用计数/GC&quot;]
+        Mem --&gt; Copy[&quot;深浅拷贝&quot;]
+        Obj --&gt; GIL[&quot;GIL/多线程限制&quot;]
+        GIL --&gt; MP[&quot;多进程/异步/扩展&quot;]</code></pre>
+      <p class="diagram-caption">Python 面试主线是对象、协议、内存和运行时限制。</p>
+    </article>
+  
+    <article class="diagram-card" data-search="生成器执行模型 用暂停/恢复解释 generator，比只说“节省内存”更稳。 generator">
+      <h3>生成器执行模型</h3>
+      <pre class="mermaid-source"><code class="language-mermaid">sequenceDiagram
+        participant C as 调用方
+        participant G as generator
+        C-&gt;&gt;G: next()
+        G--&gt;&gt;C: yield value
+        C-&gt;&gt;G: next()
+        G--&gt;&gt;C: yield next
+        C-&gt;&gt;G: next()
+        G--&gt;&gt;C: StopIteration</code></pre>
+      <p class="diagram-caption">用暂停/恢复解释 generator，比只说“节省内存”更稳。</p>
+    </article>
+  </div>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>Mermaid 渲染说明</h2>
+      <ul class="knowledge-list">
+        <li class="knowledge-card">
+          <b class="knowledge-title">离线阅读与源码保底</b>
+          <p>页面会尝试从 jsDelivr 和 unpkg 加载 Mermaid，并使用 <code>mermaid.initialize</code> 与 <code>mermaid.run</code> 渲染图谱。</p>
+          <p class="knowledge-note">注释：如果网络不可用，原始 Mermaid 源码仍然保留在 <code>mermaid-raw</code> 折叠块里，不会影响正文阅读。</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="source-material" class="section source-material" data-search-section>
+      <h2>原文资料转写</h2>
+      <p>以下内容从原始 Markdown 转为 HTML，并保留原有目录、图片、折叠追问、代码与参考链接。</p>
+      <div class="source-body"><h1 id="python">Python</h1>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#什么是-python-生成器">什么是 Python 生成器？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#什么是-python-迭代器">什么是 Python 迭代器？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#list-和-tuple-有什么区别">list 和 tuple 有什么区别？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#python-中的-list-和-dict-是怎么实现的">Python 中的 list 和 dict 是怎么实现的？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#python-中使用多线程可以达到多核cpu一起使用吗">Python 中使用多线程可以达到多核CPU一起使用吗？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#什么是装饰器">什么是装饰器？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#python-如何进行内存管理">Python 如何进行内存管理？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#python-中的垃圾回收机制">Python 中的垃圾回收机制？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#什么是-lambda-表达式">什么是 lambda 表达式？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#什么是深拷贝和浅拷贝">什么是深拷贝和浅拷贝？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#双等于和-is-有什么区别">双等于和 is 有什么区别？</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#其它-python-知识点">其它 Python 知识点</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">*</span><div><a href="#参考">参考</a></div></div>
+</div>
+<hr>
+<h2 id="什么是-python-生成器">什么是 Python 生成器？</h2>
+<p>generator，有两种产生生成器对象的方式：一种是列表生成式加括号：</p>
+<pre class="code-block"><code>g1 = (x for x in range(10))</code></pre>
+<p>一种是在函数定义中包含<code>yield</code>关键字：</p>
+<pre class="code-block"><code class="language-py">def fib(max):
+    n, a, b = 0, 0, 1
+    while n &lt; max:
+        yield b
+        a, b = b, a + b
+        n = n + 1
+    return &#39;done&#39;
+
+g2 = fib(8)</code></pre>
+<p>对于generator对象g1和g2，可以通过<code>next(g1)</code>不断获得下一个元素的值，如果没有更多的元素，就会报错<code>StopIteration</code></p>
+<p>也可以通过for循环获得元素的值。</p>
+<p>生成器的好处是不用占用很多内存，只需要在用的时候计算元素的值就行了。</p>
+<h2 id="什么是-python-迭代器">什么是 Python 迭代器？</h2>
+<p>Python中可以用于for循环的，叫做可迭代<code>Iterable</code>，包括list/set/tuple/str/dict等数据结构以及生成器；可以用以下语句判断一个对象是否是可迭代的：</p>
+<pre class="code-block"><code class="language-py">from collections import Iterable
+isinstance(x, Iterable)</code></pre>
+<p>迭代器<code>Iterator</code>，是指可以被<code>next()</code>函数调用并不断返回下一个值，直到<code>StopIteration</code>；生成器都是Iterator，而列表等数据结构不是；可以通过以下语句将list变为Iterator：</p>
+<pre class="code-block"><code>iter([1,2,3,4,5])</code></pre>
+<p>生成器都是Iterator，但迭代器不一定是生成器。</p>
+<h2 id="list-和-tuple-有什么区别">list 和 tuple 有什么区别？</h2>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>list 长度可变，tuple不可变；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>list 中元素的值可以改变，tuple 不能改变；</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>list 支持<code>append</code>; <code>insert</code>; <code>remove</code>; <code>pop</code>等方法，tuple 都不支持</div></div>
+</div>
+<h2 id="python-中的-list-和-dict-是怎么实现的">Python 中的 list 和 dict 是怎么实现的？</h2>
+<h2 id="python-中使用多线程可以达到多核cpu一起使用吗">Python 中使用多线程可以达到多核CPU一起使用吗？</h2>
+<p>Python中有一个被称为Global Interpreter Lock（GIL）的东西，它会确保任何时候你的多个线程中，只有一个被执行。线程的执行速度非常之快，会让你误以为线程是并行执行的，但是实际上都是轮流执行。经过GIL这一道关卡处理，会增加执行的开销。</p>
+<p>可以通过多进程实现多核任务。</p>
+<h2 id="gil-global-interpreter-lock">GIL(Global Interpreter Lock)</h2>
+<p>全局解释器锁</p>
+<p>全局解释器锁(Global Interpreter Lock)是计算机程序设计语言解释器用于同步线程的一种机制，它使得任何时刻仅有一个线程在执行。即便在多核处理器上，使用 GIL 的解释器也只允许同一时间执行一个线程，常见的使用 GIL 的解释器有CPython与Ruby MRI。可以看到GIL并不是Python独有的特性，是解释型语言处理多线程问题的一种机制而非语言特性。</p>
+<h3 id="gil的设计初衷">GIL的设计初衷?</h3>
+<details class="source-detail">
+<summary>展开</summary>
+<p>单核时代高效利用CPU, 针对解释器级别的数据安全(不是thread-safe 线程安全)。 首先需要明确的是GIL并不是Python的特性，它是在实现Python解析器(CPython)时所引入的一个概念。当Python虚拟机的线程想要调用C的原生线程需要知道线程的上下文，因为没有办法控制C的原生线程的执行，所以只能把上下文关系传给原生线程，同理获取结果也是线 程在python虚拟机这边等待。那么要执行一次计算操作，就必须让执行程序的线程组串行执行。</p>
+</details>
+<h3 id="为什么要加在解释器-而不是在其他层">为什么要加在解释器,而不是在其他层?</h3>
+<details class="source-detail">
+<summary>展开</summary>
+<p>GIL锁加在解释器一层，也就是说Python调用的Cython解释器上加了GIL锁，因为你python调用的所有线程都是原生线程。原生线程是通过C语言提供原生接口，相当于C语言的一个函数。你一调它，你就控制不了了它了，就必须等它给你返回结果。只要已通过python虚拟机 ，再往下就不受python控制了，就是C语言自己控制了。加在Python虚拟机以下加不上去，只能加在Python解释器这一层。</p>
+</details>
+<h3 id="gil的实现是线程不安全-为什么">GIL的实现是线程不安全?为什么?</h3>
+<details class="source-detail">
+<summary>展开</summary>
+<p>是不安全的，具体情况要分类讨论。</p>
+<p>单核情况下:</p>
+<figure class="source-figure"><img src="https://images2017.cnblogs.com/blog/1088183/201709/1088183-20170926140930839-80064182.png" alt="单核情况下——线程不安全"><figcaption>单核情况下——线程不安全</figcaption></figure>
+<blockquote>解释:</blockquote>
+<blockquote>1. 到第5步的时候，可能这个时候python正好切换了一次GIL(据说python2.7中，每100条指令会切换一次GIL),执行的时间到了，被要求释放GIL,这个时候thead 1的count=0并没有得到执行，而是挂起状态，count=0这个上下文关系被存到寄存器中.</blockquote>
+<blockquote>2. 然后到第6步，这个时候thead 2开始执行，然后就变成了count = 1,返回给count，这个时候count=1.</blockquote>
+<blockquote>3. 然后再回到thead 1，这个时候由于上下文关系，thead 1拿到的寄存器中的count = 0，经过计算，得到count = 1，经过第13步的操作就覆盖了原来的count = 1的值，所以这个时候count依然是count = 1，所以这个数据并没有保护起来。</blockquote>
+<p>python2.x和3.x都是在执行IO操作的时候，强制释放GIL，使其他线程有机会执行程序。</p>
+<p>Python2.x Python使用计数器ticks计算字节码，当执行100个字节码的时候强制释放GIL，其他线程获取GIL继续执行。ticks可以看作是Python自己的计数器，专门作用于GIL，释放后归零，技术可以调整。</p>
+<p>Python3.x Python使用计时器，执行时间达到阈值后，当前线程释放GIL。总体来说比Python3.x对CPU密集型任务更好，但是依然没有解决问题。</p>
+<p>多核情况下:</p>
+<p>多个CPU情况下，单个CPU释放GIL锁，其他CPU上的线程也会竞争，但是CPU-A可能又马上拿到了GIL，这样其他CPU上的线程只能继续等待，直到重新回到待调度状态。造成多线程在多核CPU情况下，效率反而会下降，出现了大量的资源浪费。</p>
+</details>
+<h2 id="什么是装饰器">什么是装饰器？</h2>
+<h2 id="python-中的垃圾回收机制">Python 中的垃圾回收机制？</h2>
+<p><a href="https://www.jianshu.com/p/1e375fb40506" target="_blank" rel="noreferrer">Python垃圾回收机制--完美讲解!</a></p>
+<h2 id="什么是-lambda-表达式">什么是 lambda 表达式？</h2>
+<p>简单来说，lambda表达式通常是当你需要使用一个函数，但是又不想费脑袋去命名一个函数的时候使用，也就是通常所说的匿名函数。</p>
+<p>lambda表达式一般的形式是：关键词lambda后面紧接一个或多个参数，紧接一个冒号“：”，紧接一个表达式</p>
+<h2 id="什么是深拷贝和浅拷贝">什么是深拷贝和浅拷贝？</h2>
+<p>赋值（=），就是创建了对象的一个新的引用，修改其中任意一个变量都会影响到另一个。</p>
+<p>浅拷贝 copy.copy：创建一个新的对象，但它包含的是对原始对象中包含项的引用（如果用引用的方式修改其中一个对象，另外一个也会修改改变）</p>
+<p>深拷贝：创建一个新的对象，并且递归的复制它所包含的对象（修改其中一个，另外一个不会改变）{copy模块的deep.deepcopy()函数}</p>
+<h2 id="双等于和-is-有什么区别">双等于和 is 有什么区别？</h2>
+<p><code>==</code>比较的是两个变量的 value，只要值相等就会返回True</p>
+<p><code>is</code>比较的是两个变量的 id，即<code>id(a) == id(b)</code>，只有两个变量指向同一个对象的时候，才会返回True</p>
+<p>但是需要注意的是，比如以下代码：</p>
+<pre class="code-block"><code>a = 2
+b = 2
+print(a is b)</code></pre>
+<p>按照上面的解释，应该会输出False，但是事实上会输出True，这是因为Python中对小数据有缓存机制，-5~256之间的数据都会被缓存。</p>
+<hr>
+<h2 id="其它-python-知识点">其它 Python 知识点</h2>
+<h3 id="类型转换">类型转换</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>list(x)</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>str(x)</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>set(x)</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>int(x)</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div>tuple(x)</div></div>
+</div>
+<h3 id="try-except">try...except</h3>
+<h3 id="list">list</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><code>lst[a:b]</code>：左闭右开</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><code>lst.append(value)</code>：在末尾添加元素，复杂度O(1)</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><code>lst.pop()</code>：弹出列表末尾元素，复杂度O(1)</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><code>lst.pop(index)</code>：弹出任意位置元素，将后面的元素前移，复杂度O(n)</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><code>lst.insert(index, value)</code>：插入元素，后面的元素后移，复杂度O(n)</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><code>lst.remove(value)</code>：移除等于value的第一个元素，后面的元素前移，复杂度O(n)</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><code>lst.count(value)</code>：计数值为value的元素个数</div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><code>lst.sort(reverse = False)</code>：排序，默认升序</div></div>
+</div>
+<h3 id="参考">参考</h3>
+<div class="md-list">
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1017318207388128" target="_blank" rel="noreferrer">生成器 - 廖雪峰的官方网站</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://www.cnblogs.com/yjtxin/p/11793243.html" target="_blank" rel="noreferrer">Python中的is和==的区别</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://www.mdeditor.tw/pl/pXhj" target="_blank" rel="noreferrer">为什么Python多线程无法利用多核</a></div></div>
+<div class="md-list-row depth-0"><span class="md-marker">-</span><div><a href="https://www.cnblogs.com/Keep-Ambition/p/7596098.html" target="_blank" rel="noreferrer">GIL锁、线程锁(互斥锁)、递归锁(RLock)</a></div></div>
+</div></div>
+    </section>
+
+    <section id="review-plan" class="section" data-search-section>
+      <h2>3 / 5 / 7 天复习计划</h2>
+      <ul class="knowledge-list">
+        <li class="knowledge-card">
+          <b class="knowledge-title">3 天：先过主干</b>
+          <p>第一遍只看目录、逐章复习卡和 Mermaid 图谱，把每个章节整理成一句话定义与一个典型追问。</p>
+          <p class="knowledge-note">注释：这一轮不要陷入细枝末节，目标是建立完整地图。</p>
+        </li>
+        <li class="knowledge-card">
+          <b class="knowledge-title">5 天：补齐追问</b>
+          <p>第二遍打开原文折叠块，按“机制、边界、故障、指标、命令”补答案，遇到不会的地方回到原文或权威资料。</p>
+          <p class="knowledge-note">注释：能讲清追问，才算从“看过”变成“能答”。</p>
+        </li>
+        <li class="knowledge-card">
+          <b class="knowledge-title">7 天：模拟面试</b>
+          <p>第三遍用页内搜索随机抽题，强迫自己 2 分钟内回答，再对照原文和复习卡补证据链。</p>
+          <p class="knowledge-note">注释：最后一天只修表达，不再大面积新增材料，保证临场稳定。</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="section" data-search-section>
+      <h2>来源与授权</h2>
+      <div class="license-note">
+        <p>本页是基于 <a href="https://github.com/wolverinn/Waking-Up" target="_blank" rel="noreferrer">wolverinn/Waking-Up</a> 的 GPLv3 授权资料生成的本地 HTML 改编版。源文件：<a href="https://github.com/wolverinn/Waking-Up/blob/cf692b5/Python%20Handbook.md" target="_blank" rel="noreferrer">Python Handbook.md</a>，源提交：<code>cf692b5</code>。</p>
+        <p>输出目录内已复制 <code>LICENSE</code>。如果这些 HTML 被公开分发，应继续保留 GPLv3 授权、原始来源、修改说明与对应源码/生成脚本。</p>
+      </div>
+    </section>
+
+    <div id="noResults" class="no-results">没有找到匹配内容。换一个关键词试试。</div>
+  </main>
+  <script>
+    const searchInput = document.getElementById("search");
+    const noResults = document.getElementById("noResults");
+    const searchable = [...document.querySelectorAll("[data-search-section]")];
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      searchable.forEach((section) => {
+        const haystack = section.textContent.toLowerCase();
+        const match = !query || haystack.includes(query);
+        section.classList.toggle("hidden-by-search", !match);
+        if (match) visible += 1;
+      });
+      noResults.classList.toggle("visible", query && visible === 0);
+    });
+
+    async function loadMermaid() {
+      const urls = [
+        "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js",
+        "https://unpkg.com/mermaid@10/dist/mermaid.min.js"
+      ];
+      for (const url of urls) {
+        try {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = url;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+          if (window.mermaid) return window.mermaid;
+        } catch {}
+      }
+      return null;
+    }
+
+    async function renderMermaid() {
+      const blocks = [...document.querySelectorAll(".mermaid-source")];
+      if (!blocks.length) return;
+      const mermaidLib = await loadMermaid();
+      blocks.forEach((block, index) => {
+        const code = block.textContent;
+        const figure = document.createElement("figure");
+        figure.className = "mermaid-figure";
+        const diagram = document.createElement("div");
+        diagram.className = "mermaid";
+        diagram.id = "mermaid-diagram-" + index;
+        diagram.textContent = code;
+        const raw = document.createElement("details");
+        raw.className = "mermaid-raw";
+        raw.innerHTML = "<summary>查看 Mermaid 源码</summary><pre><code></code></pre>";
+        raw.querySelector("code").textContent = code;
+        figure.appendChild(diagram);
+        figure.appendChild(raw);
+        block.replaceWith(figure);
+      });
+      if (!mermaidLib) {
+        document.querySelectorAll(".mermaid-figure").forEach((figure) => {
+          const error = document.createElement("div");
+          error.className = "mermaid-error";
+          error.textContent = "Mermaid CDN 加载失败，已保留源码。";
+          figure.appendChild(error);
+        });
+        return;
+      }
+      mermaidLib.initialize({
+        startOnLoad: false,
+        securityLevel: "loose",
+        theme: "base",
+        themeVariables: {
+          fontFamily: "Microsoft YaHei, Noto Sans SC, system-ui, sans-serif",
+          fontSize: "15px",
+          primaryColor: "#f6f5f2",
+          primaryTextColor: "#242424",
+          primaryBorderColor: "#d8d5cb",
+          lineColor: "#6f6f6f",
+          secondaryColor: "#f0f5ff",
+          tertiaryColor: "#eef7f5",
+          noteBkgColor: "#fff8e7",
+          noteTextColor: "#242424"
+        },
+        flowchart: {
+          htmlLabels: true,
+          useMaxWidth: false,
+          curve: "basis",
+          nodeSpacing: 42,
+          rankSpacing: 54,
+          padding: 12
+        },
+        sequence: {
+          mirrorActors: false,
+          useMaxWidth: true
+        }
+      });
+      try {
+        await mermaidLib.run({ querySelector: ".mermaid" });
+      } catch (error) {
+        document.querySelectorAll(".mermaid-figure").forEach((figure) => {
+          if (figure.querySelector("svg")) return;
+          const box = document.createElement("div");
+          box.className = "mermaid-error";
+          box.textContent = "Mermaid 渲染失败：" + (error && error.message ? error.message : String(error));
+          figure.appendChild(box);
+        });
+      }
+    }
+    renderMermaid();
+  </script>
+</body>
+</html>
