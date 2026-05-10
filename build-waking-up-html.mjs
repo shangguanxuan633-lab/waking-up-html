@@ -9,13 +9,13 @@ const sourceRepo = "https://github.com/wolverinn/Waking-Up";
 
 const pages = [
   {
-    source: "README.md",
+    source: "generated technical index",
     output: "index.html",
-    title: "Waking-Up 复习资料总览",
-    short: "总览",
+    title: "技术复习资料总览",
+    short: "技术索引",
     domain: "overview",
     accent: "blue",
-    promise: "把原仓库的使用方式、模块入口、补充链接与授权信息整理成一个离线入口页。",
+    promise: "把计算机基础、后端面试和开发工具模块整理成可检索、可离线阅读的入口页。",
   },
   {
     source: "Computer Network.md",
@@ -75,6 +75,7 @@ const pages = [
 
 const outputBySource = new Map(pages.map((page) => [page.source, page.output]));
 const sourceByOutput = new Map(pages.map((page) => [page.output, page.source]));
+const technicalPages = pages.filter((page) => page.domain !== "overview");
 
 function esc(value) {
   return String(value).replace(/[&<>"']/g, (ch) => ({
@@ -465,11 +466,7 @@ function renderHtmlImage(line) {
   const alt = line.match(/\b(?:alt|name)=["']([^"']+)["']/i)?.[1] || src.split("/").pop() || "image";
   const width = line.match(/\bwidth=["']?([^"'\s>]+)["']?/i)?.[1];
   const style = width ? ` style="max-width:${attr(width)}"` : "";
-  const widthNumber = Number(String(width || "").replace(/[^\d.]/g, ""));
-  const isAvatar = /avatars\d*\.githubusercontent\.com|githubusercontent\.com\/u\//i.test(src) || (widthNumber > 0 && widthNumber <= 80);
-  const className = isAvatar ? "source-figure avatar-figure" : "source-figure";
-  const caption = isAvatar ? "" : `<figcaption>${esc(alt)}</figcaption>`;
-  return `<figure class="${className}"><img src="${attr(src)}" alt="${attr(alt)}"${style}>${caption}</figure>`;
+  return `<figure class="source-figure"><img src="${attr(src)}" alt="${attr(alt)}"${style}><figcaption>${esc(alt)}</figcaption></figure>`;
 }
 
 function domainAnnotation(title, domain) {
@@ -498,6 +495,34 @@ function buildKnowledgeCards(headings, page) {
       <p class="knowledge-note">注释：${esc(domainAnnotation(heading.title, page.domain))}</p>
     </li>
   `).join("");
+}
+
+function indexHeadings() {
+  return technicalPages.map((topic, index) => ({
+    level: 2,
+    raw: topic.title,
+    title: `${index + 1}. ${topic.short}`,
+    id: slug(topic.short),
+  }));
+}
+
+function buildIndexKnowledgeCards() {
+  return technicalPages.map((topic, index) => `
+    <li class="knowledge-card" data-search="${attr(`${topic.title} ${topic.promise}`)}">
+      <b class="knowledge-title">${index + 1}. <a href="${attr(topic.output)}">${esc(topic.title)}</a></b>
+      <p>${esc(topic.promise)}</p>
+      <p class="knowledge-note">注释：该专题已整理为独立 HTML，包含图谱、原文转写和复习卡，方便直接按知识模块复习。</p>
+    </li>
+  `).join("");
+}
+
+function aggregateIndexStats() {
+  const base = { chars: 0, lines: 0, headings: 0, details: 0, images: 0, codeBlocks: 0, listRows: 0 };
+  for (const topic of technicalPages) {
+    const stats = statsFor(readSource(topic));
+    for (const key of Object.keys(base)) base[key] += stats[key];
+  }
+  return base;
 }
 
 function diagramCard(title, source, caption = "", tags = []) {
@@ -544,7 +569,7 @@ function domainDiagrams(page, headings) {
   const extra = {
     overview: [
       diagramCard("Waking-Up 资料版图", `flowchart LR
-        R["README 总览"] --> N["计算机网络"]
+        R["技术索引"] --> N["计算机网络"]
         R --> O["操作系统"]
         R --> D["数据库"]
         R --> P["设计模式"]
@@ -553,7 +578,7 @@ function domainDiagrams(page, headings) {
         N --> I["后端校招/社招面试"]
         O --> I
         D --> I
-        P --> I`, "入口页保留原仓库导航，并补上 HTML 版目录。", ["overview"]),
+        P --> I`, "入口页按技术模块组织，并补上 HTML 版目录。", ["overview"]),
     ],
     network: [
       diagramCard("一次请求的网络链路", `flowchart LR
@@ -681,24 +706,37 @@ function sourceLinks(current) {
 }
 
 function renderPage(page, commit, dateText) {
-  const markdown = readSource(page);
-  const headings = extractHeadings(markdown);
-  const stats = statsFor(markdown);
-  const rendered = renderMarkdown(markdown);
-  const title = page.title;
+  const isIndex = page.output === "index.html";
+  const markdown = isIndex ? "" : readSource(page);
+  const headings = isIndex ? indexHeadings() : extractHeadings(markdown);
+  const stats = isIndex ? aggregateIndexStats() : statsFor(markdown);
+  const rendered = isIndex ? { html: "", toc: [] } : renderMarkdown(markdown);
+  const title = isIndex ? "技术复习资料总览" : page.title;
+  const pagePromise = isIndex
+    ? "计算机网络、操作系统、数据库、设计模式、Git/REST/Linux 与 Python 的可检索离线复习入口。"
+    : page.promise;
   const allPagesLinks = pageCardLinks(page);
   const related = sourceLinks(page);
   const diagrams = domainDiagrams(page, headings).join("");
   const body = rendered.html;
-  const toc = rendered.toc
+  const toc = (isIndex ? headings : rendered.toc)
     .filter((item) => item.level <= 3)
     .slice(0, 80)
-    .map((item) => `<a class="toc-pill level-${item.level}" href="#${attr(item.id)}">${esc(item.title)}</a>`)
+    .map((item) => isIndex
+      ? `<a class="toc-pill level-${item.level}" href="${attr(technicalPages.find((topic) => item.title.includes(topic.short))?.output ?? "#")}">${esc(item.title)}</a>`
+      : `<a class="toc-pill level-${item.level}" href="#${attr(item.id)}">${esc(item.title)}</a>`)
     .join("");
-  const reviewCards = buildKnowledgeCards(headings, page);
-  const originalUrl = `${sourceRepo}/blob/${commit}/${encodeURIComponent(page.source).replace(/%2F/g, "/")}`;
-  const localSource = page.source;
-  const isIndex = page.output === "index.html";
+  const reviewCards = isIndex ? buildIndexKnowledgeCards() : buildKnowledgeCards(headings, page);
+  const originalUrl = isIndex ? sourceRepo : `${sourceRepo}/blob/${commit}/${encodeURIComponent(page.source).replace(/%2F/g, "/")}`;
+  const localSource = isIndex ? "generated technical index" : page.source;
+  const sourceSection = isIndex ? "" : `    <section id="source-material" class="section source-material" data-search-section>
+      <h2>原文资料转写</h2>
+      <p>以下内容从原始 Markdown 转为 HTML，并保留原有目录、图片、折叠追问、代码与参考链接。</p>
+      <div class="source-body">${body}</div>
+    </section>`;
+  const attribution = isIndex
+    ? `<p>本页是基于 <a href="${attr(sourceRepo)}" target="_blank" rel="noreferrer">wolverinn/Waking-Up</a> 的 GPLv3 授权技术资料生成的本地 HTML 技术索引；源提交：<code>${esc(commit)}</code>。</p>`
+    : `<p>本页是基于 <a href="${attr(sourceRepo)}" target="_blank" rel="noreferrer">wolverinn/Waking-Up</a> 的 GPLv3 授权资料生成的本地 HTML 改编版。源文件：<a href="${attr(originalUrl)}" target="_blank" rel="noreferrer">${esc(page.source)}</a>，源提交：<code>${esc(commit)}</code>。</p>`;
 
   return `<!doctype html>
 <html lang="zh-CN">
@@ -1090,16 +1128,6 @@ function renderPage(page, commit, dateText) {
       margin: 16px 0;
       text-align: center;
     }
-    .avatar-figure {
-      display: inline-block;
-      margin: 6px;
-      vertical-align: middle;
-    }
-    .avatar-figure img {
-      width: 40px;
-      height: 40px;
-      object-fit: cover;
-    }
     .source-figure img,
     .inline-img {
       max-width: 100%;
@@ -1198,7 +1226,7 @@ function renderPage(page, commit, dateText) {
         <p class="eyebrow">Waking-Up HTML · GPLv3 Derived Review</p>
         <h1>${esc(title)}</h1>
       </div>
-      <p class="hero-copy">${esc(page.promise)}</p>
+      <p class="hero-copy">${esc(pagePromise)}</p>
       <div class="meta-grid">
         <div class="meta-item"><b>源文件</b><span>${esc(localSource)}</span></div>
         <div class="meta-item"><b>源提交</b><span>${esc(commit)}</span></div>
@@ -1265,11 +1293,7 @@ function renderPage(page, commit, dateText) {
       </ul>
     </section>
 
-    <section id="source-material" class="section source-material" data-search-section>
-      <h2>原文资料转写</h2>
-      <p>以下内容从原始 Markdown 转为 HTML，并保留原有目录、图片、折叠追问、代码与参考链接。</p>
-      <div class="source-body">${body}</div>
-    </section>
+${sourceSection}
 
     <section id="review-plan" class="section" data-search-section>
       <h2>3 / 5 / 7 天复习计划</h2>
@@ -1295,7 +1319,7 @@ function renderPage(page, commit, dateText) {
     <section class="section" data-search-section>
       <h2>来源与授权</h2>
       <div class="license-note">
-        <p>本页是基于 <a href="${attr(sourceRepo)}" target="_blank" rel="noreferrer">wolverinn/Waking-Up</a> 的 GPLv3 授权资料生成的本地 HTML 改编版。源文件：<a href="${attr(originalUrl)}" target="_blank" rel="noreferrer">${esc(page.source)}</a>，源提交：<code>${esc(commit)}</code>。</p>
+        ${attribution}
         <p>输出目录内已复制 <code>LICENSE</code>。如果这些 HTML 被公开分发，应继续保留 GPLv3 授权、原始来源、修改说明与对应源码/生成脚本。</p>
       </div>
     </section>
@@ -1415,7 +1439,7 @@ function renderPage(page, commit, dateText) {
 }
 
 function renderIndexSection(commit) {
-  const cards = pages.filter((page) => page.output !== "index.html").map((page) => `
+  const cards = technicalPages.map((page) => `
     <li class="knowledge-card" data-search="${attr(`${page.title} ${page.promise}`)}">
       <b class="knowledge-title"><a href="${attr(page.output)}">${esc(page.title)}</a></b>
       <p>${esc(page.promise)}</p>
@@ -1424,11 +1448,42 @@ function renderIndexSection(commit) {
   `).join("");
   return `
     <section class="section" data-search-section>
-      <h2>HTML 资料包</h2>
-      <p>本目录把 Waking-Up 仓库当前提交 <code>${esc(commit)}</code> 的 7 个 Markdown 文件转换成 7 个 HTML 文件。</p>
+      <h2>技术 HTML 资料包</h2>
+      <p>本目录将 Waking-Up 仓库当前提交 <code>${esc(commit)}</code> 中的 6 个技术 Markdown 文件转换成独立 HTML。</p>
       <ul class="knowledge-list">${cards}</ul>
     </section>
   `;
+}
+
+function pruneUnusedImages() {
+  const assetDir = path.join(outDir, "_v_images");
+  if (!fs.existsSync(assetDir)) return [];
+  const used = new Set();
+  for (const htmlFile of fs.readdirSync(outDir).filter((file) => file.endsWith(".html"))) {
+    const html = fs.readFileSync(path.join(outDir, htmlFile), "utf8");
+    for (const match of html.matchAll(/(?:src|href)="(_v_images\/[^"#?]+)[^"]*"/g)) {
+      used.add(match[1].replace(/\//g, path.sep));
+    }
+  }
+
+  const removed = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+        if (fs.readdirSync(full).length === 0) fs.rmdirSync(full);
+        continue;
+      }
+      const rel = path.relative(outDir, full);
+      if (!used.has(rel)) {
+        fs.rmSync(full);
+        removed.push(rel.replace(/\\/g, "/"));
+      }
+    }
+  };
+  walk(assetDir);
+  return removed;
 }
 
 function writeOutputs() {
@@ -1462,26 +1517,31 @@ function writeOutputs() {
     const html = renderPage(page, commit, dateText);
     fs.writeFileSync(output, html, "utf8");
     manifest.files.push({
-      source: page.source,
+      source: page.output === "index.html" ? "generated technical index" : page.source,
       output: page.output,
-      title: page.title,
-      sourceUrl: `${sourceRepo}/blob/${commit}/${encodeURIComponent(page.source).replace(/%2F/g, "/")}`,
+      title: page.output === "index.html" ? "技术复习资料总览" : page.title,
+      sourceUrl: page.output === "index.html"
+        ? sourceRepo
+        : `${sourceRepo}/blob/${commit}/${encodeURIComponent(page.source).replace(/%2F/g, "/")}`,
     });
   }
+
+  const removedImages = pruneUnusedImages();
+  manifest.removedUnusedAssets = removedImages;
 
   fs.writeFileSync(path.join(outDir, "source-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 
   const notice = [
-    "# Waking-Up HTML 资料包",
+    "# Waking-Up Technical HTML Review Pack",
     "",
     `Generated at: ${dateText} Asia/Shanghai`,
     `Source: ${sourceRepo}`,
     `Source commit: ${commit}`,
     "",
-    "This directory contains GPLv3-derived local HTML versions of the Waking-Up review materials.",
+    "This directory contains GPLv3-derived local HTML versions of the technical Waking-Up review materials.",
     "Keep LICENSE, attribution, source links, and this generator script when distributing modified versions.",
     "",
-    "One-to-one mapping:",
+    "Technical mapping:",
     ...manifest.files.map((file) => `- ${file.source} -> ${file.output}`),
     "",
   ].join("\n");

@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026/05/10 20:09:57",
+  "generatedAt": "2026/05/10 21:14:18",
   "timezone": "Asia/Shanghai",
   "sourceRepo": "https://github.com/wolverinn/Waking-Up",
   "sourceCommit": "cf692b5",
   "files": [
     {
-      "source": "README.md",
+      "source": "generated technical index",
       "output": "index.html",
-      "title": "Waking-Up 复习资料总览",
-      "sourceUrl": "https://github.com/wolverinn/Waking-Up/blob/cf692b5/README.md"
+      "title": "技术复习资料总览",
+      "sourceUrl": "https://github.com/wolverinn/Waking-Up"
     },
     {
       "source": "Computer Network.md",
@@ -46,5 +46,23 @@
       "title": "Python 面试复习",
       "sourceUrl": "https://github.com/wolverinn/Waking-Up/blob/cf692b5/Python%20Handbook.md"
     }
+  ],
+  "removedUnusedAssets": [
+    "_v_images/20191129101827556_21212.png",
+    "_v_images/20191129112652915_15481.png",
+    "_v_images/20191129153624025_28293.png",
+    "_v_images/20191129155345024_11142.png",
+    "_v_images/20191129161026032_32431.png",
+    "_v_images/20191202090217863_1873.png",
+    "_v_images/20191228182659294_7488.jpg",
+    "_v_images/20191228182911371_900.png",
+    "_v_images/20191228183019711_10018.png",
+    "_v_images/20191229101924303_17994.png",
+    "_v_images/20191229111930083_22798.png",
+    "_v_images/20191229112508482_31766.png",
+    "_v_images/20191229113357178_17374.png",
+    "_v_images/20191229144622659_9248.png",
+    "_v_images/20200516165618.png",
+    "_v_images/20200516165630.png"
   ]
 }
